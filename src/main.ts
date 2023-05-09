@@ -8,7 +8,7 @@ async function bootstrap() {
     .setTitle('Communities api ')
     .setDescription('Rest Api for communities')
     .setVersion('1.0')
-    .addTag('communities')
+    .addTag('communitiesApi')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

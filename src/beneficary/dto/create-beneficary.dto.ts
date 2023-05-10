@@ -9,7 +9,7 @@ export class CreateBeneficaryDto {
     description: 'Name Of Beneficary',
   })
   @IsString()
-  name: String;
+  name: string;
 
   @ApiProperty({
     enum: Gender,
@@ -17,7 +17,7 @@ export class CreateBeneficaryDto {
     description: 'Gender Of Beneficary',
   })
   @IsEnum(Gender)
-  gender: String;
+  gender: Gender;
 
   @ApiProperty({
     type: 'string',
@@ -25,7 +25,7 @@ export class CreateBeneficaryDto {
     description: 'Wallet  Of Beneficary',
   })
   @IsString()
-  walletAddress: String;
+  walletAddress: string;
 
   @ApiProperty({
     type: 'string',
@@ -35,7 +35,7 @@ export class CreateBeneficaryDto {
   @Length(8, 12, {
     message: 'Invalid Phone Number',
   })
-  phone: String;
+  phone: string;
 
   @ApiProperty({
     type: 'date',
@@ -43,4 +43,13 @@ export class CreateBeneficaryDto {
     description: 'Date of birth  Of Beneficary',
   })
   dateOfBirth: Date;
+
+  @ApiProperty({
+    required: false,
+  })
+  tokensAssigned: number;
+  @ApiProperty({
+    required: false,
+  })
+  tokensClaimed: number;
 }

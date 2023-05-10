@@ -1,9 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { BeneficaryService } from './beneficary.service';
 import { CreateBeneficaryDto } from './dto/create-beneficary.dto';
 import { UpdateBeneficaryDto } from './dto/update-beneficary.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('beneficary')
+@ApiTags('Beneficary')
 export class BeneficaryController {
   constructor(private readonly beneficaryService: BeneficaryService) {}
 
@@ -23,7 +33,10 @@ export class BeneficaryController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBeneficaryDto: UpdateBeneficaryDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateBeneficaryDto: UpdateBeneficaryDto,
+  ) {
     return this.beneficaryService.update(+id, updateBeneficaryDto);
   }
 

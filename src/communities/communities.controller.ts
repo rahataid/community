@@ -1,9 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { CommunitiesService } from './communities.service';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('communities')
+@ApiTags('Communities')
 export class CommunitiesController {
   constructor(private readonly communitiesService: CommunitiesService) {}
 
@@ -18,12 +29,15 @@ export class CommunitiesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: Number) {
     return this.communitiesService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommunityDto: UpdateCommunityDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCommunityDto: UpdateCommunityDto,
+  ) {
     return this.communitiesService.update(+id, updateCommunityDto);
   }
 

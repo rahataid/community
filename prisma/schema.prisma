@@ -27,20 +27,17 @@ enum Gender {
 }
 
 model Beneficary {
-  id             Int       @id @default(autoincrement())
-  name           String
-  gender         Gender
-  walletAddress  String?
-  phone          String?
-  dateOfBirth    DateTime?
-  tokensAssigned Int       @default(0)
-  tokensClaimed  Int       @default(0)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id            Int      @id @default(autoincrement())
+  gender        Gender
+  walletAddress String?
+  age           Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model CommunitiesBeneficary {
-  id           Int @id @default(autoincrement())
-  beneficaryId Int
-  communityId  Int
+  id          Int    @id @default(autoincrement())
+  communityId Int
+  summaryType String
+  summaryData Json
 }

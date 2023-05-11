@@ -1,16 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Length, IsDate, IsEnum, IsString } from '@nestjs/class-validator';
+import { IsEnum, IsString } from '@nestjs/class-validator';
 import { Gender } from '@prisma/client';
+import { IsInt } from 'class-validator';
 
 export class CreateBeneficaryDto {
-  @ApiProperty({
-    type: 'string',
-    example: 'azmat Khatoon',
-    description: 'Name Of Beneficary',
-  })
-  @IsString()
-  name: string;
-
   @ApiProperty({
     enum: Gender,
     example: 'M',
@@ -28,28 +21,10 @@ export class CreateBeneficaryDto {
   walletAddress: string;
 
   @ApiProperty({
-    type: 'string',
-    example: '918794729',
-    description: 'Phone  Of Beneficary',
+    type: 'number',
+    example: '39',
+    description: 'Age  Of Beneficary',
   })
-  @Length(8, 12, {
-    message: 'Invalid Phone Number',
-  })
-  phone: string;
-
-  @ApiProperty({
-    type: 'date',
-    example: Date.now(),
-    description: 'Date of birth  Of Beneficary',
-  })
-  dateOfBirth: Date;
-
-  @ApiProperty({
-    required: false,
-  })
-  tokensAssigned: number;
-  @ApiProperty({
-    required: false,
-  })
-  tokensClaimed: number;
+  @IsInt()
+  age: number;
 }

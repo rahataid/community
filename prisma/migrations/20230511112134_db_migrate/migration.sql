@@ -38,3 +38,6 @@ CREATE TABLE "CommunitiesBeneficary" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Communities_title_key" ON "Communities"("title");
+
+-- AddForeignKey
+ALTER TABLE "CommunitiesBeneficary" ADD CONSTRAINT "CommunitiesBeneficary_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Communities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

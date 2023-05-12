@@ -6,10 +6,8 @@ import { PrismaClient } from '@prisma/client';
 @Injectable()
 export class CommunitiyBeneficariesService extends PrismaClient {
   create(createCommunitiyBeneficaryDto: CreateCommunitiyBeneficaryDto) {
-    console.log({ createCommunitiyBeneficaryDto });
     const { communityId, summaryType, summaryData } =
       createCommunitiyBeneficaryDto;
-    console.log({ summaryData });
     const data = {
       community: {
         connect: { id: communityId },

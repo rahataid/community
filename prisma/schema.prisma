@@ -27,6 +27,7 @@ enum Gender {
   O
 }
 
+
 model Beneficary {
   id            Int      @id @default(autoincrement())
   gender        Gender
@@ -38,8 +39,8 @@ model Beneficary {
 
 model CommunitiesBeneficary {
   id          Int    @id @default(autoincrement())
-  community   Communities       @relation(fields: [communityId],references: [id])
-  communityId Int
   summaryType String
   summaryData Json
+  community   Communities       @relation(fields: [communityId],references: [id])
+  communityId Int
 }

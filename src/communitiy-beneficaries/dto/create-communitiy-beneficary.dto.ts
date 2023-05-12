@@ -1,23 +1,25 @@
 import { ValidateNested } from '@nestjs/class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsJSON } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsJSON, IsNotEmpty } from 'class-validator';
 
-interface summary {
-  [key: string]: number;
-}
 export class CreateCommunitiyBeneficaryDto {
   @ApiProperty({
     type: 'number',
+    example: 1,
     description: 'beneficary id',
     required: true,
   })
+  @IsNotEmpty()
   communityId: number;
 
   @ApiProperty({
     type: 'string',
+    example: 'Gender',
     description: 'Summary Type',
     required: true,
   })
+  @IsNotEmpty()
   summaryType: string;
 
   @ApiProperty({
@@ -29,6 +31,5 @@ export class CreateCommunitiyBeneficaryDto {
     },
     required: true,
   })
-  @IsJSON()
-  summaryData: summary;
+  summaryData: Record<string, number>;
 }

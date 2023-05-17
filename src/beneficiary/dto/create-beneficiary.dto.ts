@@ -2,8 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsString } from '@nestjs/class-validator';
 import { Gender } from '@prisma/client';
 import { IsInt } from 'class-validator';
-
-export class CreateBeneficaryDto {
+export class CreateBeneficiaryDto {
   @ApiProperty({
     enum: Gender,
     example: 'M',

@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsJSON, IsNotEmpty } from 'class-validator';
 
-export class CreateCommunitiyBeneficaryDto {
+export class CreateCommunityBeneficiaryDto {
   @ApiProperty({
     type: 'number',
     example: 1,

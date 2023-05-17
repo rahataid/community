@@ -15,7 +15,7 @@ CREATE TABLE "Communities" (
 );
 
 -- CreateTable
-CREATE TABLE "Beneficary" (
+CREATE TABLE "Beneficiary" (
     "id" SERIAL NOT NULL,
     "gender" "Gender" NOT NULL,
     "walletAddress" TEXT,
@@ -23,21 +23,21 @@ CREATE TABLE "Beneficary" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Beneficary_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Beneficiary_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "CommunitiesBeneficary" (
+CREATE TABLE "CommunitiesBeneficiary" (
     "id" SERIAL NOT NULL,
-    "communityId" INTEGER NOT NULL,
     "summaryType" TEXT NOT NULL,
     "summaryData" JSONB NOT NULL,
+    "communityId" INTEGER NOT NULL,
 
-    CONSTRAINT "CommunitiesBeneficary_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "CommunitiesBeneficiary_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Communities_title_key" ON "Communities"("title");
 
 -- AddForeignKey
-ALTER TABLE "CommunitiesBeneficary" ADD CONSTRAINT "CommunitiesBeneficary_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Communities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CommunitiesBeneficiary" ADD CONSTRAINT "CommunitiesBeneficiary_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Communities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

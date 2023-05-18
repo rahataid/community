@@ -5,8 +5,8 @@ import { IsInt } from 'class-validator';
 
 export class CreateDonationTransactionDto {
   @ApiProperty({
-    example: 'pending  ',
-    type: TxnsStatus,
+    example: 'PENDING',
+    enum: TxnsStatus,
     description: 'status of transaction',
   })
   @IsEnum(TxnsStatus)
@@ -48,9 +48,9 @@ export class CreateDonationTransactionDto {
 
   @ApiProperty({
     example: 'pending  ',
-    type: SupportedCrypto,
+    enum: SupportedCrypto,
     description: 'status of transaction',
   })
   @IsEnum(SupportedCrypto)
-  crypto: SupportedCrypto;
+  currencyType: SupportedCrypto;
 }

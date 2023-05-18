@@ -21,7 +21,7 @@ export class CreateDonorDto {
 
   @ApiProperty({
     example: 'organization',
-    type: DonorType,
+    enum: DonorType,
     description: 'Type Of Donor',
   })
   @IsEnum(DonorType)

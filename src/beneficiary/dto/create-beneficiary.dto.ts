@@ -6,15 +6,15 @@ export class CreateBeneficiaryDto {
   @ApiProperty({
     enum: Gender,
     example: 'M',
-    description: 'Gender Of Beneficary',
+    description: 'Gender Of Beneficiary',
   })
   @IsEnum(Gender)
   gender: Gender;
 
   @ApiProperty({
     type: 'string',
-    example: '0x4gdjtv23gdj.......',
-    description: 'Wallet  Of Beneficary',
+    example: '0x4gdjtv23ujghDTGFD378FRW56ED',
+    description: 'Wallet  Of Beneficiary',
   })
   @IsString()
   walletAddress: string;
@@ -22,7 +22,7 @@ export class CreateBeneficiaryDto {
   @ApiProperty({
     type: 'number',
     example: '39',
-    description: 'Age  Of Beneficary',
+    description: 'Age  Of Beneficiary',
   })
   @IsInt()
   age: number;

@@ -14,7 +14,12 @@ export class CommunitiesService extends PrismaClient {
   }
 
   findOne(id: number) {
-    return this.communities.findFirst({ where: { id } });
+    return this.communities.findFirst({
+      where: { id },
+      include: {
+        donation: true,
+      },
+    });
   }
 
   update(id: number, updateCommunityDto: UpdateCommunityDto) {
@@ -23,5 +28,9 @@ export class CommunitiesService extends PrismaClient {
 
   remove(id: number) {
     return this.communities.delete({ where: { id } });
+  }
+
+  findDonationsById(id: number) {
+    return this.donationTxns.findMany({ where: { doneeId: id } });
   }
 }

@@ -66,6 +66,11 @@ export class CommunitiesController {
 
   @Get('/beneficiarySummary/:id')
   listBeneficiarySummary(@Param('id') id: number) {
-    return this.communitiesBeneficiaries.findAll(id);
+    return this.communitiesBeneficiaries.findAll(+id);
+  }
+
+  @Get('/donations/:id')
+  listBeneficiaryDonations(@Param('id') id: number) {
+    return this.communitiesService.findDonationsById(+id);
   }
 }

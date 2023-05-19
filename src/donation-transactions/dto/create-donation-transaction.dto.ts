@@ -5,7 +5,7 @@ import { IsInt } from 'class-validator';
 
 export class CreateDonationTransactionDto {
   @ApiProperty({
-    example: 'PENDING',
+    example: 'pending',
     enum: TxnsStatus,
     description: 'status of transaction',
   })
@@ -16,7 +16,7 @@ export class CreateDonationTransactionDto {
 
   @ApiProperty({
     type: 'number',
-    example: '1',
+    example: 1,
     description: 'Donor user Id',
   })
   @IsInt()
@@ -24,7 +24,7 @@ export class CreateDonationTransactionDto {
 
   @ApiProperty({
     type: 'number',
-    example: '1',
+    example: 1,
     description: 'Community id to donate',
   })
   @IsInt()
@@ -47,7 +47,7 @@ export class CreateDonationTransactionDto {
   amount: number;
 
   @ApiProperty({
-    example: 'pending  ',
+    example: 'BTC ',
     enum: SupportedCrypto,
     description: 'status of transaction',
   })

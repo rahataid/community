@@ -14,6 +14,7 @@ import { UpdateCommunityDto } from './dto/update-community.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CommunityBeneficiariesService } from 'src/community-beneficiaries/community-beneficiaries.service';
 import { CreateCommunityBeneficiaryDto } from 'src/community-beneficiaries/dto/create-community-beneficiary.dto';
+import { ProjectAddDto } from './dto/project-add.dto';
 
 @Controller('communities')
 @ApiTags('Communities')
@@ -72,5 +73,18 @@ export class CommunitiesController {
   @Get('/donations/:id')
   listBeneficiaryDonations(@Param('id') id: number) {
     return this.communitiesService.findDonationsById(+id);
+  }
+
+  @Get('/projects/:id')
+  listBeneficiaryProjects(@Param('id') id: number) {
+    return this.communitiesService.findProjectsById(+id);
+  }
+
+  @Post('/projects/:id')
+  addBeneficiaryProjects(
+    @Param('id') id: number,
+    @Body() projectAddDto: ProjectAddDto,
+  ) {
+    return this.communitiesService.addProject(+id, projectAddDto);
   }
 }

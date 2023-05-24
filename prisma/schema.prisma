@@ -11,7 +11,7 @@ datasource db {
 }
 
 enum TxnsStatus {
-  success
+  Success
   pending
   failed
 }
@@ -82,4 +82,32 @@ model DonationTxns {
   txnHash String
   amount  Float
   crypto  SupportedCrypto
+}
+
+
+model Project {
+  id  Int        @id @default(autoincrement())
+  name  String
+  description  String
+  manager     String
+  communities  CommunityProject[]
+
+}
+
+model CommunityProject {
+    id  Int        @id @default(autoincrement())
+    communityId   Int
+    projects Project @relation(fields: [communityId],references: [id])
+    projectId     Int
+
+}
+
+
+model CommunityTransasction {
+   id  Int        @id @default(autoincrement())
+    communityId   Int
+    txnHash       String
+    txnDate         DateTime
+    status        TxnsStatus
+
 }

@@ -70,6 +70,25 @@ CREATE TABLE "DonationTxns" (
     CONSTRAINT "DonationTxns_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Project" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "manager" TEXT NOT NULL,
+
+    CONSTRAINT "Project_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CommunityProject" (
+    "id" SERIAL NOT NULL,
+    "communityId" INTEGER NOT NULL,
+    "projectId" INTEGER NOT NULL,
+
+    CONSTRAINT "CommunityProject_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Communities_title_key" ON "Communities"("title");
 

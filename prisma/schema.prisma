@@ -11,9 +11,9 @@ datasource db {
 }
 
 enum TxnsStatus {
-  Success
-  pending
-  failed
+  SUCCESS
+  PENDING
+  FAILED
 }
 
 enum SupportedCrypto {
@@ -38,6 +38,7 @@ model Communities {
   donation        DonationTxns[]
   createdAt       DateTime                 @default(now())
   updatedAt       DateTime                 @updatedAt
+  projects      CommunityProject[]
 }
 
 model Beneficiary {
@@ -66,48 +67,44 @@ model Donor {
   id          Int            @id @default(autoincrement())
   name        String
   email       String
-  donorType        DonorType
+  donorType   DonorType
   phoneNumber String
   donations   DonationTxns[]
 }
 
 model DonationTxns {
-  id      Int         @id @default(autoincrement())
+  id      Int             @id @default(autoincrement())
   status  TxnsStatus
-  txnDate DateTime    @default(now())
-  donor   Donor       @relation(fields: [donorId], references: [id])
+  txnDate DateTime        @default(now())
+  donor   Donor           @relation(fields: [donorId], references: [id])
   donorId Int
-  donee   Communities @relation(fields: [doneeId], references: [id])
+  donee   Communities     @relation(fields: [doneeId], references: [id])
   doneeId Int
   txnHash String
   amount  Float
   crypto  SupportedCrypto
 }
 
-
 model Project {
-  id  Int        @id @default(autoincrement())
-  name  String
-  description  String
+  id          Int                @id @default(autoincrement())
+  name        String
+  description String
   manager     String
-  communities  CommunityProject[]
-
+  communities CommunityProject[]
 }
 
 model CommunityProject {
-    id  Int        @id @default(autoincrement())
-    communityId   Int
-    projects Project @relation(fields: [communityId],references: [id])
-    projectId     Int
-
+  id          Int     @id @default(autoincrement())
+  communities Communities @relation(fields: [communityId], references: [id])
+  communityId Int
+  projects    Project @relation(fields: [projectId], references: [id])
+  projectId   Int
 }
 
-
 model CommunityTransasction {
-   id  Int        @id @default(autoincrement())
-    communityId   Int
-    txnHash       String
-    txnDate         DateTime
-    status        TxnsStatus
-
+  id          Int        @id @default(autoincrement())
+  communityId Int
+  txnHash     String
+  txnDate     DateTime
+  status      TxnsStatus
 }

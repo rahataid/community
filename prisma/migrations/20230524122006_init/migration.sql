@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "TxnsStatus" AS ENUM ('success', 'pending', 'failed');
+CREATE TYPE "TxnsStatus" AS ENUM ('SUCCESS', 'PENDING', 'FAILED');
 
 -- CreateEnum
 CREATE TYPE "SupportedCrypto" AS ENUM ('ETH', 'BTC', 'MATIC');
@@ -89,6 +89,17 @@ CREATE TABLE "CommunityProject" (
     CONSTRAINT "CommunityProject_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "CommunityTransasction" (
+    "id" SERIAL NOT NULL,
+    "communityId" INTEGER NOT NULL,
+    "txnHash" TEXT NOT NULL,
+    "txnDate" TIMESTAMP(3) NOT NULL,
+    "status" "TxnsStatus" NOT NULL,
+
+    CONSTRAINT "CommunityTransasction_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Communities_title_key" ON "Communities"("title");
 
@@ -100,3 +111,9 @@ ALTER TABLE "DonationTxns" ADD CONSTRAINT "DonationTxns_donorId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "DonationTxns" ADD CONSTRAINT "DonationTxns_doneeId_fkey" FOREIGN KEY ("doneeId") REFERENCES "Communities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CommunityProject" ADD CONSTRAINT "CommunityProject_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Communities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CommunityProject" ADD CONSTRAINT "CommunityProject_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

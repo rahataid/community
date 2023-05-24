@@ -3,6 +3,7 @@ import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 import { PrismaClient } from '@prisma/client';
 import { ProjectAddDto } from './dto/project-add.dto';
+import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 
 @Injectable()
 export class CommunitiesService extends PrismaClient {
@@ -36,8 +37,9 @@ export class CommunitiesService extends PrismaClient {
   }
 
   findProjectsById(id: number) {
-    return this.communityProject.findMany({
-      where: { communityId: id },
+    return this.communities.findMany({
+      where: { id },
+      include: { projects: true },
     });
   }
 
@@ -45,5 +47,18 @@ export class CommunitiesService extends PrismaClient {
     return this.communityProject.create({
       data: { communityId, ...projectAddDto },
     });
+  }
+
+  addTransactions(
+    communityId: number,
+    createCommunityTransactionDto: CreateCommunityTransactionDto,
+  ) {
+    return this.communityTransasction.create({
+      data: { communityId, ...createCommunityTransactionDto },
+    });
+  }
+
+  getTransactions(communityId: number) {
+    return this.communityTransasction.findMany({ where: { communityId } });
   }
 }

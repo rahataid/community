@@ -1,27 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class CommunitiesService extends PrismaClient {
+export class CommunitiesService {
+  constructor(private readonly prisma: PrismaService) {}
+
   create(createCommunityDto: CreateCommunityDto) {
-    return this.communities.create({ data: createCommunityDto });
+    return this.prisma.community.create({ data: createCommunityDto });
   }
 
   findAll() {
-    return this.communities.findMany();
+    return this.prisma.community.findMany();
   }
 
   findOne(id: number) {
-    return this.communities.findFirst({ where: { id } });
+    return this.prisma.community.findFirst({ where: { id } });
   }
 
   update(id: number, updateCommunityDto: UpdateCommunityDto) {
-    return this.communities.update({ where: { id }, data: updateCommunityDto });
+    return this.prisma.community.update({
+      where: { id },
+      data: updateCommunityDto,
+    });
   }
 
   remove(id: number) {
-    return this.communities.delete({ where: { id } });
+    return this.prisma.community.delete({ where: { id } });
   }
 }

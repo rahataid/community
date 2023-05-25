@@ -11,5 +11,5 @@ export class CreateCommunityDto {
   location?: string;
 
   @ApiProperty({ required: false })
-  establishedDate: Date;
+  establishedDate: string;
 }

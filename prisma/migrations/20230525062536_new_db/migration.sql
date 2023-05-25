@@ -1,15 +1,15 @@
 -- CreateTable
-CREATE TABLE "Communities" (
+CREATE TABLE "Community" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
     "location" TEXT,
-    "establishedDate" TIMESTAMP(3),
+    "establishedDate" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Communities_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Community_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Communities_title_key" ON "Communities"("title");
+CREATE UNIQUE INDEX "Community_title_key" ON "Community"("title");

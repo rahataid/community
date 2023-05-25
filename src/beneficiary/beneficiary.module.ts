@@ -4,6 +4,6 @@ import { BeneficiaryController } from './beneficiary.controller';
 
 @Module({
   controllers: [BeneficiaryController],
-  providers: [BeneficiaryService]
+  providers: [BeneficiaryService],
 })
 export class BeneficiaryModule {}

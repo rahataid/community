@@ -9,7 +9,9 @@ describe('CommunityBeneficiariesService', () => {
       providers: [CommunityBeneficiariesService],
     }).compile();
 
-    service = module.get<CommunityBeneficiariesService>(CommunityBeneficiariesService);
+    service = module.get<CommunityBeneficiariesService>(
+      CommunityBeneficiariesService,
+    );
   });
 
   it('should be defined', () => {

@@ -16,11 +16,6 @@ enum TxnsStatus {
   FAILED
 }
 
-enum SupportedCrypto {
-  ETH
-  BTC
-  MATIC
-}
 
 enum Gender {
   M
@@ -28,14 +23,14 @@ enum Gender {
   O
 }
 
-model Communities {
+model Community {
   id              Int                      @id @default(autoincrement())
   title           String                   @unique
   description     String?
   location        String?
-  establishedDate DateTime?
+  establishedDate String?
   summary         CommunitiesBeneficiary[]
-  donation        DonationTxns[]
+  donation        DonationTransaction[]
   createdAt       DateTime                 @default(now())
   updatedAt       DateTime                 @updatedAt
   projects      CommunityProject[]
@@ -54,7 +49,7 @@ model CommunitiesBeneficiary {
   id          Int         @id @default(autoincrement())
   summaryType String
   summaryData Json
-  community   Communities @relation(fields: [communityId], references: [id])
+  community   Community @relation(fields: [communityId], references: [id])
   communityId Int
 }
 
@@ -69,20 +64,19 @@ model Donor {
   email       String
   donorType   DonorType
   phoneNumber String
-  donations   DonationTxns[]
+  donations   DonationTransaction[]
 }
 
-model DonationTxns {
+model DonationTransaction {
   id      Int             @id @default(autoincrement())
   status  TxnsStatus
   txnDate DateTime        @default(now())
   donor   Donor           @relation(fields: [donorId], references: [id])
   donorId Int
-  donee   Communities     @relation(fields: [doneeId], references: [id])
+  donee   Community     @relation(fields: [doneeId], references: [id])
   doneeId Int
   txnHash String
   amount  Float
-  crypto  SupportedCrypto
 }
 
 model Project {
@@ -95,7 +89,7 @@ model Project {
 
 model CommunityProject {
   id          Int     @id @default(autoincrement())
-  communities Communities @relation(fields: [communityId], references: [id])
+  communities Community @relation(fields: [communityId], references: [id])
   communityId Int
   projects    Project @relation(fields: [projectId], references: [id])
   projectId   Int

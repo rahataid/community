@@ -1,21 +1,19 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  ParseIntPipe,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { CommunitiesService } from './communities.service';
-import { CreateCommunityDto } from './dto/create-community.dto';
-import { UpdateCommunityDto } from './dto/update-community.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CommunityBeneficiariesService } from 'src/community-beneficiaries/community-beneficiaries.service';
-import { CreateCommunityBeneficiaryDto } from 'src/community-beneficiaries/dto/create-community-beneficiary.dto';
-import { ProjectAddDto } from './dto/project-add.dto';
+import { CommunitiesService } from './communities.service';
 import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
+import { CreateCommunityDto } from './dto/create-community.dto';
+import { ProjectAddDto } from './dto/project-add.dto';
+import { UpdateCommunityDto } from './dto/update-community.dto';
 
 @Controller('communities')
 @ApiTags('Communities')
@@ -36,7 +34,7 @@ export class CommunitiesController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: Number) {
+  findOne(@Param('id') id: number) {
     return this.communitiesService.findOne(+id);
   }
 

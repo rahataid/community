@@ -1,50 +1,48 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
-import { PrismaClient } from '@prisma/client';
-import { ProjectAddDto } from './dto/project-add.dto';
-import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 
 @Injectable()
-export class CommunitiesService extends PrismaClient {
+export class CommunitiesService {
+  constructor(private readonly prisma: PrismaService) {}
+
   create(createCommunityDto: CreateCommunityDto) {
-    return this.communities.create({ data: createCommunityDto });
+    return this.prisma.community.create({ data: createCommunityDto });
   }
 
   findAll() {
-    return this.communities.findMany();
+    return this.prisma.community.findMany();
   }
 
   findOne(id: number) {
-    return this.communities.findFirst({
-      where: { id },
-      include: {
-        donation: true,
-      },
-    });
+    return this.prisma.community.findFirst({ where: { id } });
   }
 
   update(id: number, updateCommunityDto: UpdateCommunityDto) {
-    return this.communities.update({ where: { id }, data: updateCommunityDto });
+    return this.prisma.community.update({
+      where: { id },
+      data: updateCommunityDto,
+    });
   }
 
   remove(id: number) {
-    return this.communities.delete({ where: { id } });
+    return this.prisma.community.delete({ where: { id } });
   }
 
   findDonationsById(id: number) {
-    return this.donationTxns.findMany({ where: { doneeId: id } });
+    return this.prisma.donationTransaction.findMany({ where: { doneeId: id } });
   }
 
   findProjectsById(id: number) {
-    return this.communities.findMany({
+    return this.prisma.community.findMany({
       where: { id },
       include: { projects: true },
     });
   }
 
   addProject(communityId: number, projectAddDto: ProjectAddDto) {
-    return this.communityProject.create({
+    return this.prisma.communityProject.create({
       data: { communityId, ...projectAddDto },
     });
   }
@@ -53,12 +51,14 @@ export class CommunitiesService extends PrismaClient {
     communityId: number,
     createCommunityTransactionDto: CreateCommunityTransactionDto,
   ) {
-    return this.communityTransasction.create({
+    return this.prisma.communityTransasction.create({
       data: { communityId, ...createCommunityTransactionDto },
     });
   }
 
   getTransactions(communityId: number) {
-    return this.communityTransasction.findMany({ where: { communityId } });
+    return this.prisma.communityTransasction.findMany({
+      where: { communityId },
+    });
   }
 }

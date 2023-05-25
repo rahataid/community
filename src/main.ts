@@ -1,33 +1,31 @@
-import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
-import { AppModule } from './app.module';
+// src/main.ts
+
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import {
-  ClassSerializerInterceptor,
-  ValidationError,
-  ValidationPipe,
-  BadRequestException,
-} from '@nestjs/common';
-import { PrismaClientExceptionFilter } from './utils/prisma-client-exception/prisma-client-exception.filter';
+import { PORT } from 'src/config';
+import { ValidationPipe } from 'src/utils/pipes/validation.pipe';
+import { AppModule } from './app.module';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(
-    new ValidationPipe({
-      exceptionFactory: (validationErrors: ValidationError[] = []) => {
-        return new BadRequestException(validationErrors);
-      },
-    }),
-  );
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+
+  app.enableCors();
+
+  app.useGlobalPipes(new ValidationPipe());
+
   const config = new DocumentBuilder()
-    .setTitle('Communities api ')
-    .setDescription('Rest Api for communities')
-    .setVersion('1.0')
-    .addTag('communitiesApi')
+    .setTitle('Community Api')
+    .setDescription('Rahat Communities')
+    .setVersion('0.1')
+    .setBasePath('/api/v1')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
-  await app.listen(5000);
+  SwaggerModule.setup('api/docs', app, document);
+
+  console.log(`Listening on port ${PORT}...`);
+  console.log(`Swagger UI: http://localhost:${PORT}/api/docs`);
+
+  await app.listen(PORT);
 }
 bootstrap();

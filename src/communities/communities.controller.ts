@@ -89,10 +89,7 @@ export class CommunitiesController {
     @Param('id') id: number,
     @Body() createCommunityTransactionDto: CreateCommunityTransactionDto,
   ) {
-    return this.communitiesService.addTransactions(
-      +id,
-      createCommunityTransactionDto,
-    );
+    return this.addTransactions(+id, createCommunityTransactionDto);
   }
 
   @Get('/transactions/:id')

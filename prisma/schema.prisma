@@ -98,7 +98,7 @@ model CommunityProject {
 model CommunityTransasction {
   id          Int        @id @default(autoincrement())
   communityId Int
-  txnHash     String
-  txnDate     DateTime
-  status      TxnsStatus
+  txnHash     String?
+  txnDate     DateTime?
+  status      TxnsStatus?
 }

@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsString } from '@nestjs/class-validator';
 import { TxnsStatus } from '@prisma/client';
-import { IsEnum } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
 
 export class CreateCommunityTransactionDto {
   @ApiProperty({

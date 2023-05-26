@@ -9,17 +9,17 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CommunityBeneficiariesService } from 'src/community-beneficiaries/community-beneficiaries.service';
-import { CommunitiesService } from './communities.service';
+import { CommunityService } from './communities.service';
 import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { ProjectAddDto } from './dto/project-add.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 
 @Controller('communities')
-@ApiTags('Communities')
+@ApiTags('communities')
 export class CommunitiesController {
   constructor(
-    private readonly communitiesService: CommunitiesService,
+    private readonly communitiesService: CommunityService,
     private readonly communitiesBeneficiaries: CommunityBeneficiariesService,
   ) {}
 
@@ -74,9 +74,9 @@ export class CommunitiesController {
     return this.communitiesService.findDonationsById(+id);
   }
 
-  @Get('/projects/:id')
+  @Get('/:id/projects')
   listProjects(@Param('id') id: string) {
-    return this.communitiesService.findProjectsById(+id);
+    return this.communitiesService.findCommunityProjects(+id);
   }
 
   @Post('/projects/:id')
@@ -92,8 +92,8 @@ export class CommunitiesController {
     return this.addTransactions(+id, createCommunityTransactionDto);
   }
 
-  @Get('/transactions/:id')
-  listTransactions(@Param('id') id: number) {
-    return this.communitiesService.findProjectsById(+id);
-  }
+  // @Get('/transactions/:id')
+  // listTransactions(@Param('id') id: number) {
+  //   return this.communitiesService.(+id);
+  // }
 }

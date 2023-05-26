@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SupportedCrypto, TxnsStatus } from '@prisma/client';
+import { TxnsStatus } from '@prisma/client';
 import { IsEnum, IsInt, IsString } from 'class-validator';
 
 export class CreateDonationTransactionDto {
@@ -44,12 +44,4 @@ export class CreateDonationTransactionDto {
   })
   @IsInt()
   amount: number;
-
-  @ApiProperty({
-    example: 'BTC ',
-    enum: SupportedCrypto,
-    description: 'status of transaction',
-  })
-  @IsEnum(SupportedCrypto)
-  currencyType: SupportedCrypto;
 }

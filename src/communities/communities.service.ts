@@ -6,46 +6,45 @@ import { ProjectAddDto } from './dto/project-add.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 
 @Injectable()
-export class CommunitiesService {
+export class CommunityService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createCommunityDto: CreateCommunityDto) {
-    return this.prisma.communities.create({ data: createCommunityDto });
+    return this.prisma.community.create({ data: createCommunityDto });
   }
 
   findAll() {
-    return this.prisma.communities.findMany();
+    return this.prisma.community.findMany();
   }
 
   findOne(id: number) {
-    return this.prisma.communities.findFirst({
+    return this.prisma.community.findFirst({
       where: { id },
     });
   }
 
   update(id: number, updateCommunityDto: UpdateCommunityDto) {
-    return this.prisma.communities.update({
+    return this.prisma.community.update({
       where: { id },
       data: updateCommunityDto,
     });
   }
 
   remove(id: number) {
-    return this.prisma.communities.delete({ where: { id } });
+    return this.prisma.community.delete({ where: { id } });
   }
 
   findDonationsById(id: number) {
-    return this.prisma.donationTxns.findMany({ where: { doneeId: id } });
+    return this.prisma.donationTransaction.findMany({ where: { doneeId: id } });
   }
 
-  findProjectsById(id: number) {
-    return this.prisma.project.findMany({
+  findCommunityProjects(id: number) {
+    return this.prisma.communityProject.findMany({
       where: {
-        communities: {
-          some: {
-            communityId: id,
-          },
-        },
+        communityId: id,
+      },
+      include: {
+        projects: true,
       },
     });
   }

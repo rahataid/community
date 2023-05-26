@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsString, IsInt } from '@nestjs/class-validator';
+import { IsInt } from 'class-validator';
 
 export class ProjectAddDto {
   @ApiProperty({

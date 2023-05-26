@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsString } from '@nestjs/class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateCommunityDto {
   @ApiProperty({

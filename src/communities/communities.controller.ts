@@ -75,7 +75,7 @@ export class CommunitiesController {
   }
 
   @Get('/projects/:id')
-  listProjects(@Param('id') id: number) {
+  listProjects(@Param('id') id: string) {
     return this.communitiesService.findProjectsById(+id);
   }
 

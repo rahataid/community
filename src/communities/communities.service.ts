@@ -18,7 +18,9 @@ export class CommunitiesService {
   }
 
   findOne(id: number) {
-    return this.prisma.communities.findFirst({ where: { id } });
+    return this.prisma.communities.findFirst({
+      where: { id },
+    });
   }
 
   update(id: number, updateCommunityDto: UpdateCommunityDto) {
@@ -37,9 +39,14 @@ export class CommunitiesService {
   }
 
   findProjectsById(id: number) {
-    return this.prisma.communities.findMany({
-      where: { id },
-      include: { projects: true },
+    return this.prisma.project.findMany({
+      where: {
+        communities: {
+          some: {
+            communityId: id,
+          },
+        },
+      },
     });
   }
 

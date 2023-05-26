@@ -1,7 +1,6 @@
-import { TxnsStatus, SupportedCrypto } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString } from '@nestjs/class-validator';
-import { IsInt } from 'class-validator';
+import { SupportedCrypto, TxnsStatus } from '@prisma/client';
+import { IsEnum, IsInt, IsString } from 'class-validator';
 
 export class CreateDonationTransactionDto {
   @ApiProperty({

@@ -4,7 +4,7 @@ import { IsInt } from 'class-validator';
 export class ProjectAddDto {
   @ApiProperty({
     type: 'number',
-    example: '1',
+    example: 1,
     description: 'project Id',
   })
   @IsInt()

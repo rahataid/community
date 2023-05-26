@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  const org1 = await prisma.community.create({
+  const org1 = await prisma.communities.create({
     data: {
       title: 'Rahat Jaleshwor',
       description: 'Rahat Jaleshwor is a community in Nepal',

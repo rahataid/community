@@ -16,7 +16,6 @@ enum TxnsStatus {
   FAILED
 }
 
-
 enum Gender {
   M
   F
@@ -24,16 +23,35 @@ enum Gender {
 }
 
 model Community {
-  id              Int                      @id @default(autoincrement())
-  title           String                   @unique
-  description     String?
-  location        String?
-  establishedDate String?
-  summary         CommunitiesBeneficiary[]
-  donation        DonationTransaction[]
-  createdAt       DateTime                 @default(now())
-  updatedAt       DateTime                 @updatedAt
-  projects      CommunityProject[]
+  id          Int                      @id @default(autoincrement())
+  name       String                   @unique
+  description String?
+  longitude   String?
+  latitude    String?
+  logo        String?                  @default("")
+  budget      String?
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  projects    CommunityProject[]
+  summary     CommunityReportSummary[]
+  donation    DonationTransaction[]
+  types       CommunityType[]          @relation("CommunityTypeRelation")
+}
+
+model CommunityType {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  communities Community[]             @relation("CommunityTypeRelation")
+}
+
+
+model CommunityReportSummary{
+  id          Int         @id @default(autoincrement())
+  communityId Int
+  // summaryType String
+  summaryData Json
+  community   Community @relation(fields: [communityId],references: [id])
 }
 
 model Beneficiary {
@@ -45,13 +63,7 @@ model Beneficiary {
   updatedAt     DateTime @updatedAt
 }
 
-model CommunitiesBeneficiary {
-  id          Int         @id @default(autoincrement())
-  summaryType String
-  summaryData Json
-  community   Community @relation(fields: [communityId], references: [id])
-  communityId Int
-}
+
 
 enum DonorType {
   organization
@@ -59,7 +71,7 @@ enum DonorType {
 }
 
 model Donor {
-  id          Int            @id @default(autoincrement())
+  id          Int                   @id @default(autoincrement())
   name        String
   email       String
   donorType   DonorType
@@ -68,12 +80,12 @@ model Donor {
 }
 
 model DonationTransaction {
-  id      Int             @id @default(autoincrement())
+  id      Int        @id @default(autoincrement())
   status  TxnsStatus
-  txnDate DateTime        @default(now())
-  donor   Donor           @relation(fields: [donorId], references: [id])
+  txnDate DateTime   @default(now())
+  donor   Donor      @relation(fields: [donorId], references: [id])
   donorId Int
-  donee   Community     @relation(fields: [doneeId], references: [id])
+  donee   Community  @relation(fields: [doneeId], references: [id])
   doneeId Int
   txnHash String
   amount  Float
@@ -88,15 +100,15 @@ model Project {
 }
 
 model CommunityProject {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   communities Community @relation(fields: [communityId], references: [id])
   communityId Int
-  projects    Project @relation(fields: [projectId], references: [id])
+  projects    Project   @relation(fields: [projectId], references: [id])
   projectId   Int
 }
 
 model CommunityTransasction {
-  id          Int        @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   communityId Int
   txnHash     String?
   txnDate     DateTime?

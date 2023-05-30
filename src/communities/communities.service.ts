@@ -3,14 +3,27 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { ProjectAddDto } from './dto/project-add.dto';
-import { UpdateCommunityDto } from './dto/update-community.dto';
 
 @Injectable()
 export class CommunityService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createCommunityDto: CreateCommunityDto) {
-    return this.prisma.community.create({ data: createCommunityDto });
+    const { types, ...communityData } = createCommunityDto;
+
+    const communityTypes = types?.map((typeId) => ({
+      id: typeId,
+    }));
+
+    return this.prisma.community.create({
+      // @ts-ignore
+      data: {
+        ...communityData, // Explicit cast to the appropriate type
+        types: {
+          connect: communityTypes,
+        },
+      },
+    });
   }
 
   findAll() {
@@ -18,16 +31,21 @@ export class CommunityService {
   }
 
   findOne(id: number) {
-    return this.prisma.community.findFirst({
+    return this.prisma.community.findUnique({
       where: { id },
+      include: {
+        projects: true,
+        types: true,
+        summary: true,
+      },
     });
   }
 
-  update(id: number, updateCommunityDto: UpdateCommunityDto) {
-    return this.prisma.community.update({
-      where: { id },
-      data: updateCommunityDto,
-    });
+  update(id: number, updateCommunityDto: any) {
+    //   return this.prisma.community.update({
+    //     where: { id },
+    //     data: updateCommunityDto,
+    //   });
   }
 
   remove(id: number) {

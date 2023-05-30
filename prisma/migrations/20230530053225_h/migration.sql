@@ -10,14 +10,34 @@ CREATE TYPE "DonorType" AS ENUM ('organization', 'individual');
 -- CreateTable
 CREATE TABLE "Community" (
     "id" SERIAL NOT NULL,
-    "title" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "description" TEXT,
-    "location" TEXT,
-    "establishedDate" TEXT,
+    "longitude" TEXT,
+    "latitude" TEXT,
+    "logo" TEXT DEFAULT '',
+    "budget" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Community_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CommunityType" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+
+    CONSTRAINT "CommunityType_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CommunityReportSummary" (
+    "id" SERIAL NOT NULL,
+    "communityId" INTEGER NOT NULL,
+    "summaryData" JSONB NOT NULL,
+
+    CONSTRAINT "CommunityReportSummary_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -30,16 +50,6 @@ CREATE TABLE "Beneficiary" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Beneficiary_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "CommunitiesBeneficiary" (
-    "id" SERIAL NOT NULL,
-    "summaryType" TEXT NOT NULL,
-    "summaryData" JSONB NOT NULL,
-    "communityId" INTEGER NOT NULL,
-
-    CONSTRAINT "CommunitiesBeneficiary_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -96,11 +106,23 @@ CREATE TABLE "CommunityTransasction" (
     CONSTRAINT "CommunityTransasction_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "_CommunityTypeRelation" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
 -- CreateIndex
-CREATE UNIQUE INDEX "Community_title_key" ON "Community"("title");
+CREATE UNIQUE INDEX "Community_name_key" ON "Community"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_CommunityTypeRelation_AB_unique" ON "_CommunityTypeRelation"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_CommunityTypeRelation_B_index" ON "_CommunityTypeRelation"("B");
 
 -- AddForeignKey
-ALTER TABLE "CommunitiesBeneficiary" ADD CONSTRAINT "CommunitiesBeneficiary_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Community"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CommunityReportSummary" ADD CONSTRAINT "CommunityReportSummary_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Community"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "DonationTransaction" ADD CONSTRAINT "DonationTransaction_donorId_fkey" FOREIGN KEY ("donorId") REFERENCES "Donor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -113,3 +135,9 @@ ALTER TABLE "CommunityProject" ADD CONSTRAINT "CommunityProject_communityId_fkey
 
 -- AddForeignKey
 ALTER TABLE "CommunityProject" ADD CONSTRAINT "CommunityProject_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_CommunityTypeRelation" ADD CONSTRAINT "_CommunityTypeRelation_A_fkey" FOREIGN KEY ("A") REFERENCES "Community"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_CommunityTypeRelation" ADD CONSTRAINT "_CommunityTypeRelation_B_fkey" FOREIGN KEY ("B") REFERENCES "CommunityType"("id") ON DELETE CASCADE ON UPDATE CASCADE;

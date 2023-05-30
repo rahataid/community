@@ -43,66 +43,81 @@ async function main() {
 
   console.log('Donors created:', donor1, donor2);
 
+  // Create community types
+  const communityType1 = await prisma.communityType.create({
+    data: {
+      name: 'Community Type 1',
+      description: 'Description of Community Type 1',
+    },
+  });
+
+  const communityType2 = await prisma.communityType.create({
+    data: {
+      name: 'Community Type 2',
+      description: 'Description of Community Type 2',
+    },
+  });
+
+  console.log('Community types created:', communityType1, communityType2);
+
   // Create communities
   const community1 = await prisma.community.create({
     data: {
-      title: 'Rahat Jaleshwor',
+      name: 'Rahat Jaleshwor',
       description: 'Rahat Jaleshwor is a community in Nepal',
-      location: 'Jaleshwor, Nepal',
-      establishedDate: '165668986656',
+      longitude: '27.1700',
+      latitude: '86.9833',
+      logo: '',
+      budget: '',
+      types: {
+        connect: [
+          {
+            id: communityType1.id,
+          },
+        ],
+      },
     },
   });
 
   const community2 = await prisma.community.create({
     data: {
-      title: 'Community 2',
+      name: 'Community 2',
       description: 'Description of Community 2',
-      location: 'Location of Community 2',
-      establishedDate: '165668986657',
+      longitude: '0.0000',
+      latitude: '0.0000',
+      logo: '',
+      budget: '',
+      types: {
+        connect: [
+          {
+            id: communityType1.id,
+          },
+          {
+            id: communityType2.id,
+          },
+        ],
+      },
     },
   });
 
   console.log('Communities created:', community1, community2);
 
-  // Create projects
-  const project1 = await prisma.project.create({
+  // Create community reports
+  const communityReport1 = await prisma.communityReportSummary.create({
     data: {
-      name: 'Project 1',
-      description: 'Description of Project 1',
-      manager: 'Project Manager 1',
+      communityId: community1.id,
+      summaryData: { key: 'value' },
     },
   });
 
-  const project2 = await prisma.project.create({
+  const communityReport2 = await prisma.communityReportSummary.create({
     data: {
-      name: 'Project 2',
-      description: 'Description of Project 2',
-      manager: 'Project Manager 2',
+      communityId: community2.id,
+      summaryData: { key: 'value' },
     },
   });
 
-  console.log('Projects created:', project1, project2);
-
-  // Create community projects
-  const communityProject1 = await prisma.communityProject.create({
-    data: {
-      communities: { connect: { id: community1.id } },
-      projects: { connect: { id: project1.id } },
-    },
-  });
-
-  const communityProject2 = await prisma.communityProject.create({
-    data: {
-      communities: { connect: { id: community2.id } },
-      projects: { connect: { id: project2.id } },
-    },
-  });
-
-  console.log(
-    'Community projects created:',
-    communityProject1,
-    communityProject2,
-  );
+  console.log('Community reports created:', communityReport1, communityReport2);
 
   // Create donation transactions
   const donation1 = await prisma.donationTransaction.create({
@@ -128,6 +143,52 @@ async function main() {
   });
 
   console.log('Donation transactions created:', donation1, donation2);
+
+  // Create projects
+  const project1 = await prisma.project.create({
+    data: {
+      name: 'Project 1',
+      description: 'Description of Project 1',
+      manager: 'Project Manager 1',
+      communities: { connect: [{ id: community1.id }] },
+    },
+  });
+
+  const project2 = await prisma.project.create({
+    data: {
+      name: 'Project 2',
+      description: 'Description of Project 2',
+      manager: 'Project Manager 2',
+      communities: { connect: [{ id: community1.id }, { id: community2.id }] },
+    },
+  });
+
+  console.log('Projects created:', project1, project2);
+
+  // Create community transactions
+  const communityTransaction1 = await prisma.communityTransasction.create({
+    data: {
+      communityId: community1.id,
+      txnHash: 'community-transaction-hash-1',
+      txnDate: new Date(),
+      status: TxnsStatus.SUCCESS,
+    },
+  });
+
+  const communityTransaction2 = await prisma.communityTransasction.create({
+    data: {
+      communityId: community2.id,
+      txnHash: 'community-transaction-hash-2',
+      txnDate: new Date(),
+      status: TxnsStatus.FAILED,
+    },
+  });
+
+  console.log(
+    'Community transactions created:',
+    communityTransaction1,
+    communityTransaction2,
+  );
 }
 
 main()

@@ -24,7 +24,7 @@ COPY . .
 RUN npm run build
 
 # Expose port 3000 for the application
-EXPOSE 3000
+# EXPOSE 3000
 
 # Start the server using the production build
 CMD [ "node", "dist/src/main.js" ]

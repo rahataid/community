@@ -69,7 +69,7 @@ const lib = {
       manager: row.manager || '',
       description: row?.description?.replace(/\r?\n/g, '').trim() || '',
       logo: row.logo || '',
-      budget: String(row.budget) || '',
+      budget: String(row.tx_usd) || '',
       longitude: String(row.longitude) || '',
       latitude: row.latitude || '',
       transactions: {

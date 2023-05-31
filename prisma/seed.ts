@@ -44,17 +44,15 @@ async function main() {
   console.log('Donors created:', donor1, donor2);
 
   // Create community types
-  const communityType1 = await prisma.communityType.create({
+  const communityType1 = await prisma.tags.create({
     data: {
       name: 'Community Type 1',
-      description: 'Description of Community Type 1',
     },
   });
 
-  const communityType2 = await prisma.communityType.create({
+  const communityType2 = await prisma.tags.create({
     data: {
       name: 'Community Type 2',
-      description: 'Description of Community Type 2',
     },
   });
 
@@ -64,12 +62,13 @@ async function main() {
   const community1 = await prisma.community.create({
     data: {
       name: 'Rahat Jaleshwor',
+      manager: 'Manager Rahat',
       description: 'Rahat Jaleshwor is a community in Nepal',
       longitude: '27.1700',
       latitude: '86.9833',
       logo: '',
       budget: '',
-      types: {
+      tags: {
         connect: [
           {
             id: communityType1.id,
@@ -87,7 +86,8 @@ async function main() {
       latitude: '0.0000',
       logo: '',
       budget: '',
-      types: {
+      manager: 'Manager',
+      tags: {
         connect: [
           {
             id: communityType1.id,
@@ -106,14 +106,34 @@ async function main() {
   const communityReport1 = await prisma.communityReportSummary.create({
     data: {
       communityId: community1.id,
-      summaryData: { key: 'value' },
+      internet_no: '20',
+      internet_yes: '20',
+      total_beneficiaries: '222',
+      bank_no: '200',
+      bank_yes: '22',
+      gender_male: '5',
+      extra: {
+        key: 'value',
+      },
+      gender_female: '56',
+      gender_other: '4',
     },
   });
 
   const communityReport2 = await prisma.communityReportSummary.create({
     data: {
       communityId: community2.id,
-      summaryData: { key: 'value' },
+      internet_no: '20',
+      internet_yes: '20',
+      total_beneficiaries: '222',
+      bank_no: '200',
+      bank_yes: '22',
+      gender_male: '5',
+      extra: {
+        key: 'value',
+      },
+      gender_female: '56',
+      gender_other: '4',
     },
   });
 

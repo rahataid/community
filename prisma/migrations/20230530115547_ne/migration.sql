@@ -11,6 +11,7 @@ CREATE TYPE "DonorType" AS ENUM ('organization', 'individual');
 CREATE TABLE "Community" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "manager" TEXT NOT NULL,
     "description" TEXT,
     "longitude" TEXT,
     "latitude" TEXT,
@@ -23,19 +24,26 @@ CREATE TABLE "Community" (
 );
 
 -- CreateTable
-CREATE TABLE "CommunityType" (
+CREATE TABLE "Tags" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "description" TEXT,
 
-    CONSTRAINT "CommunityType_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Tags_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "CommunityReportSummary" (
     "id" SERIAL NOT NULL,
     "communityId" INTEGER NOT NULL,
-    "summaryData" JSONB NOT NULL,
+    "total_beneficiaries" TEXT NOT NULL,
+    "gender_male" TEXT,
+    "gender_female" TEXT,
+    "gender_other" TEXT,
+    "bank_yes" TEXT,
+    "bank_no" TEXT,
+    "internet_yes" TEXT NOT NULL,
+    "internet_no" TEXT NOT NULL,
+    "extra" JSONB NOT NULL,
 
     CONSTRAINT "CommunityReportSummary_pkey" PRIMARY KEY ("id")
 );
@@ -113,9 +121,6 @@ CREATE TABLE "_CommunityTypeRelation" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Community_name_key" ON "Community"("name");
-
--- CreateIndex
 CREATE UNIQUE INDEX "_CommunityTypeRelation_AB_unique" ON "_CommunityTypeRelation"("A", "B");
 
 -- CreateIndex
@@ -140,4 +145,4 @@ ALTER TABLE "CommunityProject" ADD CONSTRAINT "CommunityProject_projectId_fkey" 
 ALTER TABLE "_CommunityTypeRelation" ADD CONSTRAINT "_CommunityTypeRelation_A_fkey" FOREIGN KEY ("A") REFERENCES "Community"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_CommunityTypeRelation" ADD CONSTRAINT "_CommunityTypeRelation_B_fkey" FOREIGN KEY ("B") REFERENCES "CommunityType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_CommunityTypeRelation" ADD CONSTRAINT "_CommunityTypeRelation_B_fkey" FOREIGN KEY ("B") REFERENCES "Tags"("id") ON DELETE CASCADE ON UPDATE CASCADE;

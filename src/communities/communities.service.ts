@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 import { CreateCommunityDto } from './dto/create-community.dto';
@@ -9,18 +10,17 @@ export class CommunityService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createCommunityDto: CreateCommunityDto) {
-    const { types, ...communityData } = createCommunityDto;
+    const { tags, ...communityData } = createCommunityDto;
 
-    const communityTypes = types?.map((typeId) => ({
+    const communitytags = tags?.map((typeId) => ({
       id: typeId,
     }));
 
     return this.prisma.community.create({
-      // @ts-ignore
       data: {
         ...communityData, // Explicit cast to the appropriate type
-        types: {
-          connect: communityTypes,
+        tags: {
+          connect: communitytags,
         },
       },
     });
@@ -35,8 +35,12 @@ export class CommunityService {
       where: { id },
       include: {
         projects: true,
-        types: true,
         summary: true,
+        tags: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
   }
@@ -86,5 +90,20 @@ export class CommunityService {
     return this.prisma.communityTransasction.findMany({
       where: { communityId },
     });
+  }
+
+  createBulkTags(tags: string[]) {
+    const tagsData: Prisma.TagsCreateManyInput[] = tags.map((tag) => {
+      return { name: tag };
+    });
+
+    return this.prisma.tags.createMany({
+      data: tagsData,
+      skipDuplicates: true,
+    });
+  }
+
+  listTags() {
+    return this.prisma.tags.findMany();
   }
 }

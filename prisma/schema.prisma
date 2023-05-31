@@ -24,7 +24,8 @@ enum Gender {
 
 model Community {
   id          Int                      @id @default(autoincrement())
-  name       String                   @unique
+  name        String                   
+  manager     String
   description String?
   longitude   String?
   latitude    String?
@@ -35,23 +36,29 @@ model Community {
   projects    CommunityProject[]
   summary     CommunityReportSummary[]
   donation    DonationTransaction[]
-  types       CommunityType[]          @relation("CommunityTypeRelation")
+  tags        Tags[]                   @relation("CommunityTypeRelation")
 }
 
-model CommunityType {
+model Tags {
   id          Int         @id @default(autoincrement())
   name        String
-  description String?
-  communities Community[]             @relation("CommunityTypeRelation")
+  communities Community[] @relation("CommunityTypeRelation")
 }
 
-
-model CommunityReportSummary{
-  id          Int         @id @default(autoincrement())
-  communityId Int
+model CommunityReportSummary {
+  id                  Int       @id @default(autoincrement())
+  communityId         Int
+  total_beneficiaries String
+  gender_male         String?
+  gender_female       String?
+  gender_other        String?
+  bank_yes            String?
+  bank_no             String?
+  internet_yes        String
+  internet_no         String
   // summaryType String
-  summaryData Json
-  community   Community @relation(fields: [communityId],references: [id])
+  extra               Json
+  community           Community @relation(fields: [communityId], references: [id])
 }
 
 model Beneficiary {
@@ -62,8 +69,6 @@ model Beneficiary {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
-
-
 
 enum DonorType {
   organization

@@ -9,6 +9,13 @@ export class CreateCommunityDto {
   })
   @IsString()
   name: string;
+  @ApiProperty({
+    type: 'string',
+    example: 'Tayaba',
+    description: 'manager Of Community',
+  })
+  @IsString()
+  manager: string;
 
   @ApiProperty({
     type: 'string',
@@ -56,11 +63,11 @@ export class CreateCommunityDto {
   @ApiProperty({
     type: 'array',
     items: { type: 'number' },
-    example: [1, 2, 3],
-    description: 'Type IDs of the community',
+    example: [1, 2],
+    description: 'Tags IDs of the community',
     required: false,
   })
   @IsArray()
   @IsNumber({}, { each: true })
-  types?: number[];
+  tags?: number[];
 }

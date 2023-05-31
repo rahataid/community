@@ -12,6 +12,7 @@ import { CommunityBeneficiariesService } from 'src/community-beneficiaries/commu
 import { CommunityService } from './communities.service';
 import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 import { CreateCommunityDto } from './dto/create-community.dto';
+import { CreateTagsDto } from './dto/create-tags.dto';
 import { ProjectAddDto } from './dto/project-add.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 
@@ -90,6 +91,17 @@ export class CommunitiesController {
     @Body() createCommunityTransactionDto: CreateCommunityTransactionDto,
   ) {
     return this.addTransactions(+id, createCommunityTransactionDto);
+  }
+
+  @Post('/tags/bulk')
+  createTagsBulk(@Body() tags: CreateTagsDto) {
+    console.log('tags', tags);
+    return this.communitiesService.createBulkTags(tags.tags);
+  }
+
+  @Get('/tags')
+  listTags() {
+    return this.communitiesService.listTags();
   }
 
   // @Get('/transactions/:id')

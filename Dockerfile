@@ -1,5 +1,5 @@
 # Base image
-FROM node:18-alpine
+FROM node:18-alpine3.17
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -28,8 +28,3 @@ RUN npm run build
 
 # Start the server using the production build
 CMD [ "node", "dist/src/main.js" ]
-
-
-
-
-

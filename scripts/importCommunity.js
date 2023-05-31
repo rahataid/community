@@ -6,7 +6,7 @@ const googleCreds = require('../config/google.json');
 const axios = require('axios');
 
 const communityHost = axios.create({
-  baseURL: 'http://localhost:5300',
+  baseURL: 'https://community-api-stage.rahat.io',
 });
 
 const lib = {

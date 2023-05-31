@@ -32,20 +32,27 @@ const lib = {
     );
     // .map((t) => ({ name: t }));
 
-    const { data } = await communityHost.post('/communities/tags/bulk', {
-      tags,
-    });
-    console.log('communitTags', data);
+    // const { data } = await communityHost.post('/communities/tags/bulk', {
+    //   tags,
+    // });
+    const allTags = await communityHost.get('/communities/tags');
+    // console.log('allTags', allTags);
 
     const sanitizedData = this.sanitizeRows(rows);
 
     for (const sData of sanitizedData) {
-      const { summaries, transactions, ...commData } = sData;
-      // console.log('first', {
-      //   summaries,
-      //   commData,
-      //   transactions,
-      // });
+      const { summaries, transactions, tags: tagsString, ...commData } = sData;
+      const tags = tagsString.split(',').map((tagString) => {
+        const foundTag = allTags.find((tag) => tag.name === tagString.trim());
+        return foundTag ? foundTag.id : null;
+      });
+
+      const { data } = await communityHost.post('/communities', {
+        ...commData,
+        tags,
+        summary: summaries,
+        // tags: tags.map((t) => t.id),
+      });
     }
 
     process.exit(0);
@@ -59,12 +66,12 @@ const lib = {
     return {
       tags: row.tags,
       name: row?.name?.replace(/\r?\n/g, '').trim(),
-      manager: row.manager || null,
-      description: row?.description?.replace(/\r?\n/g, '').trim() || null,
-      logo: row.logo || null,
-      budget: row.budget || null,
-      longitude: row.longitude || null,
-      latitude: row.latitude || null,
+      manager: row.manager || '',
+      description: row?.description?.replace(/\r?\n/g, '').trim() || '',
+      logo: row.logo || '',
+      budget: String(row.budget) || '',
+      longitude: String(row.longitude) || '',
+      latitude: row.latitude || '',
       transactions: {
         description: row.tx_description,
         npr: row.tx_npr,
@@ -72,15 +79,16 @@ const lib = {
       },
       summaries: {
         total_beneficiaries: row.total_beneficiaries,
-        gender_male: row.gender_male || null,
-        gender_female: row.gender_female || null,
-        gender_other: row.gender_other || null,
-        bank_yes: row.bank_yes || null,
-        bank_no: row.bank_no || null,
-        phone_yes: row.phone_yes || null,
-        phone_no: row.phone_no || null,
-        internet_yes: row.internet_yes || null,
-        internet_no: row.internet_no || null,
+        gender_male: row.gender_male || '',
+        gender_female: row.gender_female || '',
+        gender_other: row.gender_other || '',
+        bank_yes: row.bank_yes || '',
+        bank_no: row.bank_no || '',
+        // phone_yes: row.phone_yes || null,
+        // phone_no: row.phone_no || null,
+        internet_yes: row.internet_yes || '',
+        internet_no: row.internet_no || '',
+        extra: {},
       },
       // Add other properties you want to include in the JSON output
     };

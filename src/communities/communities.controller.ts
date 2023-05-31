@@ -93,13 +93,12 @@ export class CommunitiesController {
     return this.addTransactions(+id, createCommunityTransactionDto);
   }
 
-  @Post('/tags/bulk')
+  @Post('tags/bulk')
   createTagsBulk(@Body() tags: CreateTagsDto) {
-    console.log('tags', tags);
     return this.communitiesService.createBulkTags(tags.tags);
   }
 
-  @Get('/tags')
+  @Get('tags')
   listTags() {
     return this.communitiesService.listTags();
   }

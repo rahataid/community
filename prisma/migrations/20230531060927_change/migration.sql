@@ -115,16 +115,16 @@ CREATE TABLE "CommunityTransasction" (
 );
 
 -- CreateTable
-CREATE TABLE "_CommunityTypeRelation" (
+CREATE TABLE "_CommunityTagRelation" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_CommunityTypeRelation_AB_unique" ON "_CommunityTypeRelation"("A", "B");
+CREATE UNIQUE INDEX "_CommunityTagRelation_AB_unique" ON "_CommunityTagRelation"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_CommunityTypeRelation_B_index" ON "_CommunityTypeRelation"("B");
+CREATE INDEX "_CommunityTagRelation_B_index" ON "_CommunityTagRelation"("B");
 
 -- AddForeignKey
 ALTER TABLE "CommunityReportSummary" ADD CONSTRAINT "CommunityReportSummary_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Community"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -142,7 +142,7 @@ ALTER TABLE "CommunityProject" ADD CONSTRAINT "CommunityProject_communityId_fkey
 ALTER TABLE "CommunityProject" ADD CONSTRAINT "CommunityProject_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_CommunityTypeRelation" ADD CONSTRAINT "_CommunityTypeRelation_A_fkey" FOREIGN KEY ("A") REFERENCES "Community"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_CommunityTagRelation" ADD CONSTRAINT "_CommunityTagRelation_A_fkey" FOREIGN KEY ("A") REFERENCES "Community"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_CommunityTypeRelation" ADD CONSTRAINT "_CommunityTypeRelation_B_fkey" FOREIGN KEY ("B") REFERENCES "Tags"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_CommunityTagRelation" ADD CONSTRAINT "_CommunityTagRelation_B_fkey" FOREIGN KEY ("B") REFERENCES "Tags"("id") ON DELETE CASCADE ON UPDATE CASCADE;

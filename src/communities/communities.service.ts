@@ -10,10 +10,10 @@ export class CommunityService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createCommunityDto: CreateCommunityDto) {
-    const { tags, ...communityData } = createCommunityDto;
+    const { tags, summary, ...communityData } = createCommunityDto;
 
-    const communitytags = tags?.map((typeId) => ({
-      id: typeId,
+    const communitytags = tags?.map((tagId) => ({
+      id: tagId,
     }));
 
     return this.prisma.community.create({
@@ -21,6 +21,11 @@ export class CommunityService {
         ...communityData, // Explicit cast to the appropriate type
         tags: {
           connect: communitytags,
+        },
+        summary: {
+          create: {
+            ...summary,
+          },
         },
       },
     });
@@ -50,6 +55,7 @@ export class CommunityService {
     //     where: { id },
     //     data: updateCommunityDto,
     //   });
+    return;
   }
 
   remove(id: number) {
@@ -104,6 +110,10 @@ export class CommunityService {
   }
 
   listTags() {
-    return this.prisma.tags.findMany();
+    return this.prisma.tags.findMany({
+      select: {
+        name: true,
+      },
+    });
   }
 }

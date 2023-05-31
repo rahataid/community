@@ -70,4 +70,7 @@ export class CreateCommunityDto {
   @IsArray()
   @IsNumber({}, { each: true })
   tags?: number[];
+
+  @ApiProperty({})
+  summary?: any;
 }

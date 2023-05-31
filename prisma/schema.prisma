@@ -36,13 +36,13 @@ model Community {
   projects    CommunityProject[]
   summary     CommunityReportSummary[]
   donation    DonationTransaction[]
-  tags        Tags[]                   @relation("CommunityTypeRelation")
+  tags        Tags[]                   @relation("CommunityTagRelation")
 }
 
 model Tags {
   id          Int         @id @default(autoincrement())
   name        String
-  communities Community[] @relation("CommunityTypeRelation")
+  communities Community[] @relation("CommunityTagRelation")
 }
 
 model CommunityReportSummary {

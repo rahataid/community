@@ -35,21 +35,21 @@ const lib = {
     // const { data } = await communityHost.post('/communities/tags/bulk', {
     //   tags,
     // });
-    const allTags = await communityHost.get('/communities/tags');
+    // const allTags = await communityHost.get('/communities/tags');
     // console.log('allTags', allTags);
 
     const sanitizedData = this.sanitizeRows(rows);
 
     for (const sData of sanitizedData) {
       const { summaries, transactions, tags: tagsString, ...commData } = sData;
-      const tags = tagsString.split(',').map((tagString) => {
-        const foundTag = allTags.find((tag) => tag.name === tagString.trim());
-        return foundTag ? foundTag.id : null;
-      });
+      // const tags = tagsString.split(',').map((tagString) => {
+      //   const foundTag = allTags.find((tag) => tag.name === tagString.trim());
+      //   return foundTag ? foundTag.id : null;
+      // });
 
       const { data } = await communityHost.post('/communities', {
         ...commData,
-        tags,
+        tags: [1, 2],
         summary: summaries,
         // tags: tags.map((t) => t.id),
       });

@@ -32,9 +32,9 @@ const lib = {
     );
     // .map((t) => ({ name: t }));
 
-    // const { data } = await communityHost.post('/communities/tags/bulk', {
-    //   tags,
-    // });
+    const { data } = await communityHost.post('/communities/tags/bulk', {
+      tags,
+    });
     // const allTags = await communityHost.get('/communities/tags');
     // console.log('allTags', allTags);
 

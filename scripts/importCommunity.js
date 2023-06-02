@@ -40,19 +40,28 @@ const lib = {
 
     const sanitizedData = this.sanitizeRows(rows);
 
-    for (const sData of sanitizedData) {
-      const { summaries, transactions, tags: tagsString, ...commData } = sData;
+    for (const dataIndex in sanitizedData) {
+      // const row = sanitizedData[dataIndex];
+      // row.walletAddress_real = row?.walletAddress_real?.toLowerCase()
+
+      const {
+        summaries,
+        transactions,
+        tags: tagsString,
+        ...commData
+      } = sanitizedData[dataIndex];
+      console.log('summaries', summaries);
       // const tags = tagsString.split(',').map((tagString) => {
       //   const foundTag = allTags.find((tag) => tag.name === tagString.trim());
       //   return foundTag ? foundTag.id : null;
       // });
 
-      const { data } = await communityHost.post('/communities', {
-        ...commData,
-        tags: [1, 2],
-        summary: summaries,
-        // tags: tags.map((t) => t.id),
-      });
+      // const { data } = await communityHost.post('/communities', {
+      //   ...commData,
+      //   tags: [1, 2],
+      //   summary: summaries,
+      //   // tags: tags.map((t) => t.id),
+      // });
     }
 
     process.exit(0);
@@ -69,9 +78,18 @@ const lib = {
       manager: row.manager || '',
       description: row?.description?.replace(/\r?\n/g, '').trim() || '',
       logo: row.logo || '',
-      budget: String(row.tx_usd) || '',
+      totalDonations_usd: String(row.tx_usd) || '',
       longitude: String(row.longitude) || '',
       latitude: row.latitude || '',
+      cover: row?.cover || '',
+      country: row?.country || 'Nepal',
+      walletAddress: row?.walletAddress_real
+        ? row?.walletAddress.toLowerCase()
+        : row?.walletAddress_generated
+        ? row?.walletAddress_generated.toLowerCase()
+        : // new geerated here
+          '0x00',
+
       transactions: {
         description: row.tx_description,
         npr: row.tx_npr,

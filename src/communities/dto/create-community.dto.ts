@@ -84,6 +84,13 @@ export class CreateCommunityDto {
   cover?: string;
 
   @ApiProperty({
+    type: 'number',
+    example: 'http://image.png',
+  })
+  @IsString()
+  categoryId: number;
+
+  @ApiProperty({
     type: 'array',
     items: { type: 'number' },
     example: [1, 2],

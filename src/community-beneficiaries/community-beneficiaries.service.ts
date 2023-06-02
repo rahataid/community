@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommunityBeneficiaryDto } from './dto/create-community-beneficiary.dto';
 import { UpdateCommunityBeneficiaryDto } from './dto/update-community-beneficiary.dto';
-import { PrismaClient } from '@prisma/client';
 
+// TODO: fix this
 @Injectable()
-export class CommunityBeneficiariesService extends PrismaClient {
+export class CommunityBeneficiariesService {
+  constructor(private readonly prisma: PrismaService) {}
+
   create(createCommunitiyBeneficiaryDto: CreateCommunityBeneficiaryDto) {
     const { communityId, summaryType, summaryData } =
       createCommunitiyBeneficiaryDto;
@@ -16,30 +19,31 @@ export class CommunityBeneficiariesService extends PrismaClient {
       summaryData,
     };
 
-    return this.communitiesBeneficiary.create({
-      data,
-    });
+    // return this.prisma.beneficiary.create({
+    //   // data,
+    // });
   }
 
   findAll(id: number) {
-    return this.communitiesBeneficiary.findMany({ where: { communityId: id } });
+    return this.prisma.beneficiary.findMany({
+      where: {
+        // communityId: id,
+      },
+    });
   }
 
   findOne(id: number) {
-    return this.communitiesBeneficiary.findUnique({ where: { id } });
+    return this.prisma.beneficiary.findUnique({ where: { id } });
   }
 
   update(
     id: number,
     updateCommunitiyBeneficiaryDto: UpdateCommunityBeneficiaryDto,
-  ) {
-    return this.communitiesBeneficiary.update({
-      where: { id },
-      data: updateCommunitiyBeneficiaryDto,
-    });
-  }
+  ) {}
 
   remove(id: number) {
-    return this.communitiesBeneficiary.delete({ where: { id } });
+    return this.prisma.beneficiary.delete({ where: { id } });
   }
+
+  createCommunityTypes(data) {}
 }

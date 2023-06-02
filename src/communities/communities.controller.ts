@@ -9,17 +9,17 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CommunityBeneficiariesService } from 'src/community-beneficiaries/community-beneficiaries.service';
-import { CommunitiesService } from './communities.service';
+import { CommunityService } from './communities.service';
 import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 import { CreateCommunityDto } from './dto/create-community.dto';
-import { ProjectAddDto } from './dto/project-add.dto';
+import { CreateTagsDto } from './dto/create-tags.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 
 @Controller('communities')
-@ApiTags('Communities')
+@ApiTags('communities')
 export class CommunitiesController {
   constructor(
-    private readonly communitiesService: CommunitiesService,
+    private readonly communitiesService: CommunityService,
     private readonly communitiesBeneficiaries: CommunityBeneficiariesService,
   ) {}
 
@@ -74,15 +74,15 @@ export class CommunitiesController {
     return this.communitiesService.findDonationsById(+id);
   }
 
-  @Get('/projects/:id')
+  @Get('/:id/projects')
   listProjects(@Param('id') id: string) {
-    return this.communitiesService.findProjectsById(+id);
+    return this.communitiesService.findCommunityProjects(+id);
   }
 
-  @Post('/projects/:id')
-  addProjects(@Param('id') id: number, @Body() projectAddDto: ProjectAddDto) {
-    return this.communitiesService.addProject(+id, projectAddDto);
-  }
+  // @Post('/projects/:id')
+  // addProjects(@Param('id') id: number, @Body() projectAddDto: ProjectAddDto) {
+  // return this.communitiesService.addProject(+id, projectAddDto);
+  // }
 
   @Post('/transactions/:id')
   addTransactions(
@@ -92,8 +92,18 @@ export class CommunitiesController {
     return this.addTransactions(+id, createCommunityTransactionDto);
   }
 
-  @Get('/transactions/:id')
-  listTransactions(@Param('id') id: number) {
-    return this.communitiesService.findProjectsById(+id);
+  @Post('tags/bulk')
+  createTagsBulk(@Body() tags: CreateTagsDto) {
+    return this.communitiesService.createBulkTags(tags.tags);
   }
+
+  @Get('tags')
+  listTags() {
+    return this.communitiesService.listTags();
+  }
+
+  // @Get('/transactions/:id')
+  // listTransactions(@Param('id') id: number) {
+  //   return this.communitiesService.(+id);
+  // }
 }

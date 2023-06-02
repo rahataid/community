@@ -3,7 +3,6 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 import { CreateCommunityDto } from './dto/create-community.dto';
-import { ProjectAddDto } from './dto/project-add.dto';
 
 @Injectable()
 export class CommunityService {
@@ -39,13 +38,13 @@ export class CommunityService {
     return this.prisma.community.findUnique({
       where: { id },
       include: {
-        projects: true,
         summary: true,
         tags: {
           select: {
             name: true,
           },
         },
+        category: true,
       },
     });
   }
@@ -63,38 +62,19 @@ export class CommunityService {
   }
 
   findDonationsById(id: number) {
-    return this.prisma.donationTransaction.findMany({ where: { doneeId: id } });
+    return this.prisma.transactions.findMany({ where: { doneeId: id } });
   }
 
-  findCommunityProjects(id: number) {
-    return this.prisma.communityProject.findMany({
-      where: {
-        communityId: id,
-      },
-      include: {
-        projects: true,
-      },
-    });
-  }
-
-  addProject(communityId: number, projectAddDto: ProjectAddDto) {
-    return this.prisma.communityProject.create({
-      data: { communityId, ...projectAddDto },
-    });
-  }
+  findCommunityProjects(id: number) {}
 
   addTransactions(
-    communityId: number,
+    doneeId: number,
     createCommunityTransactionDto: CreateCommunityTransactionDto,
-  ) {
-    return this.prisma.communityTransasction.create({
-      data: { communityId, ...createCommunityTransactionDto },
-    });
-  }
+  ) {}
 
-  getTransactions(communityId: number) {
-    return this.prisma.communityTransasction.findMany({
-      where: { communityId },
+  getTransactions(doneeId: number) {
+    return this.prisma.transactions.findMany({
+      where: { doneeId },
     });
   }
 

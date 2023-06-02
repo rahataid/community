@@ -16,7 +16,11 @@ CREATE TABLE "Community" (
     "longitude" TEXT,
     "latitude" TEXT,
     "logo" TEXT DEFAULT '',
-    "budget" TEXT,
+    "cover" TEXT DEFAULT '',
+    "photos" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "totalDonationsUsd" TEXT NOT NULL,
+    "categoryId" INTEGER NOT NULL,
+    "country" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -32,7 +36,7 @@ CREATE TABLE "Tags" (
 );
 
 -- CreateTable
-CREATE TABLE "CommunityReportSummary" (
+CREATE TABLE "Demographics" (
     "id" SERIAL NOT NULL,
     "communityId" INTEGER NOT NULL,
     "total_beneficiaries" TEXT NOT NULL,
@@ -45,7 +49,7 @@ CREATE TABLE "CommunityReportSummary" (
     "internet_no" TEXT NOT NULL,
     "extra" JSONB NOT NULL,
 
-    CONSTRAINT "CommunityReportSummary_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Demographics_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -63,55 +67,29 @@ CREATE TABLE "Beneficiary" (
 -- CreateTable
 CREATE TABLE "Donor" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "donorType" "DonorType" NOT NULL,
-    "phoneNumber" TEXT NOT NULL,
+    "walletAddress" TEXT NOT NULL,
 
     CONSTRAINT "Donor_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "DonationTransaction" (
+CREATE TABLE "Transactions" (
     "id" SERIAL NOT NULL,
-    "status" "TxnsStatus" NOT NULL,
-    "txnDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "donorId" INTEGER NOT NULL,
     "doneeId" INTEGER NOT NULL,
-    "txnHash" TEXT NOT NULL,
+    "txnHash" TEXT,
     "amount" DOUBLE PRECISION NOT NULL,
 
-    CONSTRAINT "DonationTransaction_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Transactions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Project" (
+CREATE TABLE "Category" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "manager" TEXT NOT NULL,
 
-    CONSTRAINT "Project_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "CommunityProject" (
-    "id" SERIAL NOT NULL,
-    "communityId" INTEGER NOT NULL,
-    "projectId" INTEGER NOT NULL,
-
-    CONSTRAINT "CommunityProject_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "CommunityTransasction" (
-    "id" SERIAL NOT NULL,
-    "communityId" INTEGER NOT NULL,
-    "txnHash" TEXT,
-    "txnDate" TIMESTAMP(3),
-    "status" "TxnsStatus",
-
-    CONSTRAINT "CommunityTransasction_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -127,19 +105,16 @@ CREATE UNIQUE INDEX "_CommunityTagRelation_AB_unique" ON "_CommunityTagRelation"
 CREATE INDEX "_CommunityTagRelation_B_index" ON "_CommunityTagRelation"("B");
 
 -- AddForeignKey
-ALTER TABLE "CommunityReportSummary" ADD CONSTRAINT "CommunityReportSummary_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Community"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Community" ADD CONSTRAINT "Community_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DonationTransaction" ADD CONSTRAINT "DonationTransaction_donorId_fkey" FOREIGN KEY ("donorId") REFERENCES "Donor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Demographics" ADD CONSTRAINT "Demographics_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Community"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DonationTransaction" ADD CONSTRAINT "DonationTransaction_doneeId_fkey" FOREIGN KEY ("doneeId") REFERENCES "Community"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Transactions" ADD CONSTRAINT "Transactions_donorId_fkey" FOREIGN KEY ("donorId") REFERENCES "Donor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CommunityProject" ADD CONSTRAINT "CommunityProject_communityId_fkey" FOREIGN KEY ("communityId") REFERENCES "Community"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "CommunityProject" ADD CONSTRAINT "CommunityProject_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Transactions" ADD CONSTRAINT "Transactions_doneeId_fkey" FOREIGN KEY ("doneeId") REFERENCES "Community"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CommunityTagRelation" ADD CONSTRAINT "_CommunityTagRelation_A_fkey" FOREIGN KEY ("A") REFERENCES "Community"("id") ON DELETE CASCADE ON UPDATE CASCADE;

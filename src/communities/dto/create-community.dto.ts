@@ -46,12 +46,21 @@ export class CreateCommunityDto {
 
   @ApiProperty({
     type: 'string',
-    example: '500',
+    example: 'Nepal',
+    description: 'community Country',
+    required: false,
+  })
+  @IsString()
+  country: string;
+
+  @ApiProperty({
+    type: 'string',
+    example: '$ 500',
     description: 'Budget of the community',
     required: false,
   })
   @IsString()
-  budget?: string;
+  totalDonationsUsd: string;
 
   @ApiProperty({
     type: 'string',
@@ -59,6 +68,27 @@ export class CreateCommunityDto {
   })
   @IsString()
   logo?: string;
+
+  @ApiProperty({
+    type: 'array',
+    example: ['http://image.png'],
+  })
+  @IsString()
+  photos: [string];
+
+  @ApiProperty({
+    type: 'string',
+    example: 'http://image.png',
+  })
+  @IsString()
+  cover?: string;
+
+  @ApiProperty({
+    type: 'number',
+    example: 'http://image.png',
+  })
+  @IsString()
+  categoryId: number;
 
   @ApiProperty({
     type: 'array',

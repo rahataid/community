@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TxnsStatus } from '@prisma/client';
-import { IsEnum, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateCommunityTransactionDto {
   @ApiProperty({
@@ -10,14 +9,6 @@ export class CreateCommunityTransactionDto {
   })
   @IsString()
   txnHash: string;
-
-  @ApiProperty({
-    example: 'PENDING',
-    enum: TxnsStatus,
-    description: 'status of transaction',
-  })
-  @IsEnum(TxnsStatus)
-  status: TxnsStatus;
 
   @ApiProperty({ required: false })
   txnDate: Date;

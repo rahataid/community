@@ -1,20 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CommunitiesModule } from './communities/communities.module';
 import { BeneficiaryModule } from './beneficiary/beneficiary.module';
+import { CommunitiesModule } from './communities/communities.module';
 import { DonorModule } from './donor/donor.module';
-import { DonationTransactionsModule } from './donation-transactions/donation-transactions.module';
-import { ProjectsModule } from './projects/projects.module';
 
 @Module({
-  imports: [
-    CommunitiesModule,
-    BeneficiaryModule,
-    DonorModule,
-    DonationTransactionsModule,
-    ProjectsModule,
-  ],
+  imports: [CommunitiesModule, BeneficiaryModule, DonorModule],
   controllers: [AppController],
   providers: [AppService],
 })

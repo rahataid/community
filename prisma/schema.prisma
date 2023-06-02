@@ -23,22 +23,24 @@ enum Gender {
 }
 
 model Community {
-  id                 Int            @id @default(autoincrement())
-  name               String
-  manager            String
-  description        String?
-  longitude          String?
-  latitude           String?
-  logo               String?        @default("")
-  cover              String?        @default("")
-  photos             String[]       @default([])
-  totalDonations_usd String
-  country            String
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-  summary            Demographics[]
-  // donation    DonationTransaction[]
-  tags               Tags[]         @relation("CommunityTagRelation")
+  id                Int            @id @default(autoincrement())
+  name              String
+  manager           String
+  description       String?
+  longitude         String?
+  latitude          String?
+  logo              String?        @default("")
+  cover             String?        @default("")
+  photos            String[]       @default([])
+  totalDonationsUsd String
+  categoryId        Int
+  country           String
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  summary           Demographics[]
+  transactions      Transactions[]
+  tags              Tags[]         @relation("CommunityTagRelation")
+  category          Category  @relation(fields: [categoryId], references: [id])
 }
 
 model Tags {
@@ -58,10 +60,8 @@ model Demographics {
   bank_no             String?
   internet_yes        String
   internet_no         String
-  // summaryType String
   extra               Json
   community           Community     @relation(fields: [communityId], references: [id])
-  beneficiaries       Beneficiary[] @relation("BenficiaryDemographics")
 }
 
 model Beneficiary {
@@ -71,8 +71,7 @@ model Beneficiary {
   age            Int
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-  demographic    Demographics @relation("BenficiaryDemographics", fields: [demographicsId], references: [id])
-  demographicsId Int
+  
 }
 
 enum DonorType {
@@ -81,23 +80,24 @@ enum DonorType {
 }
 
 model Donor {
-  id            Int       @id @default(autoincrement())
-  name          String
-  email         String
-  donorType     DonorType
+  id            Int            @id @default(autoincrement())
   walletAddress String
-  phoneNumber   String
-  // donations   DonationTransaction[]
+  transactions  Transactions[]
 }
 
 model Transactions {
-  id        Int        @id @default(autoincrement())
-  status    TxnsStatus
-  timestamp DateTime   @default(now())
-  // donor   Donor      @relation(fields: [donorId], references: [id])
+  id        Int       @id @default(autoincrement())
+  timestamp DateTime  @default(now())
+  donor     Donor     @relation(fields: [donorId], references: [id])
   donorId   Int
-  // donee   Community  @relation(fields: [doneeId], references: [id])
+  donee     Community @relation(fields: [doneeId], references: [id])
   doneeId   Int
   txnHash   String?
   amount    Float
+}
+
+model Category {
+  id          Int         @id @default(autoincrement())
+  name        String
+  communities Community[]
 }

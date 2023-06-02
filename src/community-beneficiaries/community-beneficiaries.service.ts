@@ -39,12 +39,7 @@ export class CommunityBeneficiariesService {
   update(
     id: number,
     updateCommunitiyBeneficiaryDto: UpdateCommunityBeneficiaryDto,
-  ) {
-    return this.prisma.beneficiary.update({
-      where: { id },
-      data: updateCommunitiyBeneficiaryDto,
-    });
-  }
+  ) {}
 
   remove(id: number) {
     return this.prisma.beneficiary.delete({ where: { id } });

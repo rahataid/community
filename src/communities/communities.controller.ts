@@ -13,7 +13,6 @@ import { CommunityService } from './communities.service';
 import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { CreateTagsDto } from './dto/create-tags.dto';
-import { ProjectAddDto } from './dto/project-add.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 
 @Controller('communities')
@@ -80,10 +79,10 @@ export class CommunitiesController {
     return this.communitiesService.findCommunityProjects(+id);
   }
 
-  @Post('/projects/:id')
-  addProjects(@Param('id') id: number, @Body() projectAddDto: ProjectAddDto) {
-    return this.communitiesService.addProject(+id, projectAddDto);
-  }
+  // @Post('/projects/:id')
+  // addProjects(@Param('id') id: number, @Body() projectAddDto: ProjectAddDto) {
+  // return this.communitiesService.addProject(+id, projectAddDto);
+  // }
 
   @Post('/transactions/:id')
   addTransactions(

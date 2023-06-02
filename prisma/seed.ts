@@ -1,4 +1,4 @@
-import { DonorType, Gender, PrismaClient, TxnsStatus } from '@prisma/client';
+import { Gender, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -25,23 +25,29 @@ async function main() {
   // Create donors
   const donor1 = await prisma.donor.create({
     data: {
-      name: 'Organization 1',
-      email: 'org1@example.com',
-      donorType: DonorType.organization,
-      phoneNumber: '1234567890',
+      walletAddress: '0X537GNJUDfdhyT6IHG8gHY576DDFDD57KKxwet57',
     },
   });
 
   const donor2 = await prisma.donor.create({
     data: {
-      name: 'Individual 1',
-      email: 'individual1@example.com',
-      donorType: DonorType.individual,
-      phoneNumber: '9876543210',
+      walletAddress: '0X537GNJUDfdhyr78gHY576DDFDD57567',
     },
   });
 
   console.log('Donors created:', donor1, donor2);
+
+  const category1 = await prisma.category.create({
+    data: {
+      name: 'category 1',
+    },
+  });
+
+  const category2 = await prisma.category.create({
+    data: {
+      name: 'category 2',
+    },
+  });
 
   // Create community types
   const communityType1 = await prisma.tags.create({
@@ -67,7 +73,10 @@ async function main() {
       longitude: '27.1700',
       latitude: '86.9833',
       logo: '',
-      budget: '',
+      cover: '',
+      country: 'Napal',
+      categoryId: category2.id,
+      totalDonationsUsd: '$ 1500',
       tags: {
         connect: [
           {
@@ -85,8 +94,11 @@ async function main() {
       longitude: '0.0000',
       latitude: '0.0000',
       logo: '',
-      budget: '',
       manager: 'Manager',
+      cover: '',
+      country: 'Nefol',
+      categoryId: category1.id,
+      totalDonationsUsd: '$ 1500',
       tags: {
         connect: [
           {
@@ -103,7 +115,7 @@ async function main() {
   console.log('Communities created:', community1, community2);
 
   // Create community reports
-  const communityReport1 = await prisma.communityReportSummary.create({
+  const communityReport1 = await prisma.demographics.create({
     data: {
       communityId: community1.id,
       internet_no: '20',
@@ -120,7 +132,7 @@ async function main() {
     },
   });
 
-  const communityReport2 = await prisma.communityReportSummary.create({
+  const communityReport2 = await prisma.demographics.create({
     data: {
       communityId: community2.id,
       internet_no: '20',
@@ -140,75 +152,73 @@ async function main() {
   console.log('Community reports created:', communityReport1, communityReport2);
 
   // Create donation transactions
-  const donation1 = await prisma.donationTransaction.create({
+  const donation1 = await prisma.transactions.create({
     data: {
-      status: TxnsStatus.SUCCESS,
-      txnDate: new Date(),
-      donor: { connect: { id: donor1.id } },
-      donee: { connect: { id: community1.id } },
+      timestamp: new Date(),
+      donorId: donor1.id,
+      doneeId: community1.id,
       txnHash: 'transaction-hash-1',
       amount: 100,
     },
   });
 
-  const donation2 = await prisma.donationTransaction.create({
+  const donation2 = await prisma.transactions.create({
     data: {
-      status: TxnsStatus.PENDING,
-      txnDate: new Date(),
-      donor: { connect: { id: donor2.id } },
-      donee: { connect: { id: community2.id } },
+      timestamp: new Date(),
+      donorId: donor1.id,
+      doneeId: community1.id,
       txnHash: 'transaction-hash-2',
-      amount: 200,
+      amount: 500,
     },
   });
 
   console.log('Donation transactions created:', donation1, donation2);
 
   // Create projects
-  const project1 = await prisma.project.create({
-    data: {
-      name: 'Project 1',
-      description: 'Description of Project 1',
-      manager: 'Project Manager 1',
-      communities: { connect: [{ id: community1.id }] },
-    },
-  });
+  // const project1 = await prisma.project.create({
+  //   data: {
+  //     name: 'Project 1',
+  //     description: 'Description of Project 1',
+  //     manager: 'Project Manager 1',
+  //     communities: { connect: [{ id: community1.id }] },
+  //   },
+  // });
 
-  const project2 = await prisma.project.create({
-    data: {
-      name: 'Project 2',
-      description: 'Description of Project 2',
-      manager: 'Project Manager 2',
-      communities: { connect: [{ id: community1.id }, { id: community2.id }] },
-    },
-  });
+  // const project2 = await prisma.project.create({
+  //   data: {
+  //     name: 'Project 2',
+  //     description: 'Description of Project 2',
+  //     manager: 'Project Manager 2',
+  //     communities: { connect: [{ id: community1.id }, { id: community2.id }] },
+  //   },
+  // });
 
-  console.log('Projects created:', project1, project2);
+  // console.log('Projects created:', project1, project2);
 
   // Create community transactions
-  const communityTransaction1 = await prisma.communityTransasction.create({
-    data: {
-      communityId: community1.id,
-      txnHash: 'community-transaction-hash-1',
-      txnDate: new Date(),
-      status: TxnsStatus.SUCCESS,
-    },
-  });
+  // const communityTransaction1 = await prisma.communityTransasction.create({
+  //   data: {
+  //     communityId: community1.id,
+  //     txnHash: 'community-transaction-hash-1',
+  //     txnDate: new Date(),
+  //     status: TxnsStatus.SUCCESS,
+  //   },
+  // });
 
-  const communityTransaction2 = await prisma.communityTransasction.create({
-    data: {
-      communityId: community2.id,
-      txnHash: 'community-transaction-hash-2',
-      txnDate: new Date(),
-      status: TxnsStatus.FAILED,
-    },
-  });
+  // const communityTransaction2 = await prisma.communityTransasction.create({
+  //   data: {
+  //     communityId: community2.id,
+  //     txnHash: 'community-transaction-hash-2',
+  //     txnDate: new Date(),
+  //     status: TxnsStatus.FAILED,
+  //   },
+  // });
 
-  console.log(
-    'Community transactions created:',
-    communityTransaction1,
-    communityTransaction2,
-  );
+  // console.log(
+  //   'Community transactions created:',
+  //   communityTransaction1,
+  //   communityTransaction2,
+  // );
 }
 
 main()

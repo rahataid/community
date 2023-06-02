@@ -40,7 +40,7 @@ model Community {
   summary           Demographics[]
   transactions      Transactions[]
   tags              Tags[]         @relation("CommunityTagRelation")
-  category          Category[]
+  category          Category  @relation(fields: [categoryId], references: [id])
 }
 
 model Tags {

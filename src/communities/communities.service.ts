@@ -44,6 +44,7 @@ export class CommunityService {
             name: true,
           },
         },
+        category: true,
       },
     });
   }

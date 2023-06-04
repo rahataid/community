@@ -36,7 +36,25 @@ export class CommunityService {
   }
 
   findAll() {
-    return this.prisma.community.findMany();
+    return this.prisma.community.findMany({
+      select: {
+        category: true,
+        country: true,
+        logo: true,
+        name: true,
+        id: true,
+        photos: true,
+        cover: true,
+        totalDonations_usd: true,
+        walletAddress: true,
+        latitude: true,
+        longitude: true,
+        description: true,
+      },
+      orderBy: {
+        updatedAt: 'asc',
+      },
+    });
   }
 
   findOne(id: number) {

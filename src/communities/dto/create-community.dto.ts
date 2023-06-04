@@ -9,6 +9,7 @@ export class CreateCommunityDto {
   })
   @IsString()
   name: string;
+
   @ApiProperty({
     type: 'string',
     example: 'Tayaba',
@@ -60,7 +61,16 @@ export class CreateCommunityDto {
     required: false,
   })
   @IsString()
-  totalDonationsUsd: string;
+  totalDonations_usd: string;
+
+  @ApiProperty({
+    type: 'string',
+    example: '0x00',
+    description: 'Wallet Address of the community',
+    required: true,
+  })
+  @IsString()
+  walletAddress: string;
 
   @ApiProperty({
     type: 'string',
@@ -72,9 +82,10 @@ export class CreateCommunityDto {
   @ApiProperty({
     type: 'array',
     example: ['http://image.png'],
+    required: false,
   })
-  @IsString()
-  photos: [string];
+  @IsArray()
+  photos?: string[] | null;
 
   @ApiProperty({
     type: 'string',
@@ -87,7 +98,7 @@ export class CreateCommunityDto {
     type: 'number',
     example: 'http://image.png',
   })
-  @IsString()
+  @IsNumber()
   categoryId: number;
 
   @ApiProperty({

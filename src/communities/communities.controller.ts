@@ -66,4 +66,9 @@ export class CommunitiesController {
   createCommunityManager(@Body() manager: CreateManager) {
     return this.communitiesService.createCommunityManager(manager);
   }
+
+  @Get('/search/:searchKey')
+  searchCommunity(@Param('searchKey') searchKey: string) {
+    return this.communitiesService.search(searchKey);
+  }
 }

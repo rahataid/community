@@ -113,7 +113,18 @@ export class CommunityService {
     });
   }
 
-  async createBulkTags(tags: string[]) {
+  async search(searchKey: string) {
+    return this.prisma.community.findMany({
+      where: {
+        name: {
+          contains: searchKey,
+          mode: 'insensitive',
+        },
+      },
+    });
+  }
+
+  createBulkTags(tags: string[]) {
     const tagsData: Prisma.TagsCreateManyInput[] = tags.map((tag) => {
       return { name: tag };
     });

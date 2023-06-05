@@ -123,6 +123,7 @@ export class CommunityService {
       data: {
         images: {
           //@ts-ignore
+          //@ts-nocheck
           ...commImage,
           ...updateData,
         },

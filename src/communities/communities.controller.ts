@@ -8,9 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CommunityBeneficiariesService } from 'src/community-beneficiaries/community-beneficiaries.service';
 import { CommunityService } from './communities.service';
-import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { CreateTagsDto } from './dto/create-tags.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
@@ -18,10 +16,7 @@ import { UpdateCommunityDto } from './dto/update-community.dto';
 @Controller('communities')
 @ApiTags('communities')
 export class CommunitiesController {
-  constructor(
-    private readonly communitiesService: CommunityService,
-    private readonly communitiesBeneficiaries: CommunityBeneficiariesService,
-  ) {}
+  constructor(private readonly communitiesService: CommunityService) {}
 
   @Post()
   create(@Body() createCommunityDto: CreateCommunityDto) {
@@ -34,7 +29,7 @@ export class CommunitiesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id') id: string) {
     return this.communitiesService.findOne(+id);
   }
 
@@ -51,45 +46,9 @@ export class CommunitiesController {
     return this.communitiesService.remove(+id);
   }
 
-  @Post('/beneficiarySummary/:id')
-  createBeneficiarySummary(
-    @Param('id') id: number,
-    @Body('summaryType') summaryType: string,
-    @Body('summaryData') summaryData: Record<string, number>,
-  ) {
-    return this.communitiesBeneficiaries.create({
-      communityId: id,
-      summaryData,
-      summaryType,
-    });
-  }
-
-  @Get('/beneficiarySummary/:id')
-  listBeneficiarySummary(@Param('id') id: number) {
-    return this.communitiesBeneficiaries.findAll(+id);
-  }
-
-  @Get('/donations/:id')
-  listBeneficiaryDonations(@Param('id') id: number) {
-    return this.communitiesService.findDonationsById(+id);
-  }
-
-  @Get('/:id/projects')
-  listProjects(@Param('id') id: string) {
-    return this.communitiesService.findCommunityProjects(+id);
-  }
-
-  // @Post('/projects/:id')
-  // addProjects(@Param('id') id: number, @Body() projectAddDto: ProjectAddDto) {
-  // return this.communitiesService.addProject(+id, projectAddDto);
-  // }
-
-  @Post('/transactions/:id')
-  addTransactions(
-    @Param('id') id: number,
-    @Body() createCommunityTransactionDto: CreateCommunityTransactionDto,
-  ) {
-    return this.addTransactions(+id, createCommunityTransactionDto);
+  @Patch(':id/asset')
+  updateAsset(@Param('id') id: string, @Body() assetData: UpdateCommunityDto) {
+    return this.communitiesService.updateAsset(+id, assetData);
   }
 
   @Post('tags/bulk')
@@ -98,8 +57,8 @@ export class CommunitiesController {
   }
 
   @Get('tags')
-  listTags() {
-    return this.communitiesService.listTags();
+  getAllTags() {
+    return this.communitiesService.getAllTags();
   }
 
   // @Get('/transactions/:id')

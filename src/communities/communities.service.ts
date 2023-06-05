@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateCommunityTransactionDto } from './dto/community-transaction.dto';
 import { CreateCommunityDto } from './dto/create-community.dto';
+import { UpdateCommunityAssetDto } from './dto/update-community.dto';
 
 @Injectable()
 export class CommunityService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createCommunityDto: CreateCommunityDto) {
-    const { tags, summary, ...communityData } = createCommunityDto;
+    const { tags, summary, categoryId, ...communityData } = createCommunityDto;
 
     const communitytags = tags?.map((tagId) => ({
       id: tagId,
@@ -21,6 +21,11 @@ export class CommunityService {
         tags: {
           connect: communitytags,
         },
+        category: {
+          connect: {
+            id: categoryId,
+          },
+        },
         summary: {
           create: {
             ...summary,
@@ -31,14 +36,35 @@ export class CommunityService {
   }
 
   findAll() {
-    return this.prisma.community.findMany();
+    return this.prisma.community.findMany({
+      select: {
+        category: true,
+        country: true,
+        logo: true,
+        name: true,
+        id: true,
+        photos: true,
+        cover: true,
+        totalDonations_usd: true,
+        walletAddress: true,
+        latitude: true,
+        longitude: true,
+        description: true,
+      },
+      orderBy: {
+        updatedAt: 'asc',
+      },
+    });
   }
 
   findOne(id: number) {
     return this.prisma.community.findUnique({
-      where: { id },
+      where: {
+        id,
+      },
       include: {
         summary: true,
+
         tags: {
           select: {
             name: true,
@@ -50,31 +76,33 @@ export class CommunityService {
   }
 
   update(id: number, updateCommunityDto: any) {
-    //   return this.prisma.community.update({
-    //     where: { id },
-    //     data: updateCommunityDto,
-    //   });
-    return;
+    return this.prisma.community.update({
+      where: { id },
+      data: updateCommunityDto,
+    });
   }
 
   remove(id: number) {
     return this.prisma.community.delete({ where: { id } });
   }
 
-  findDonationsById(id: number) {
-    return this.prisma.transactions.findMany({ where: { doneeId: id } });
-  }
+  updateAsset(id: number, assetData: UpdateCommunityAssetDto) {
+    const updateData: UpdateCommunityAssetDto = {};
 
-  findCommunityProjects(id: number) {}
+    if (assetData.cover) {
+      updateData.cover = assetData.cover;
+    }
+    if (assetData.logo) {
+      updateData.logo = assetData.logo;
+    }
 
-  addTransactions(
-    doneeId: number,
-    createCommunityTransactionDto: CreateCommunityTransactionDto,
-  ) {}
+    if (assetData.photos) {
+      updateData.photos = assetData.photos;
+    }
 
-  getTransactions(doneeId: number) {
-    return this.prisma.transactions.findMany({
-      where: { doneeId },
+    return this.prisma.community.update({
+      where: { id },
+      data: updateData,
     });
   }
 
@@ -93,6 +121,10 @@ export class CommunityService {
     const tagsData: Prisma.TagsCreateManyInput[] = tags.map((tag) => {
       return { name: tag };
     });
+    await this.prisma.category.createMany({
+      data: tagsData,
+      skipDuplicates: true,
+    });
 
     return this.prisma.tags.createMany({
       data: tagsData,
@@ -100,11 +132,7 @@ export class CommunityService {
     });
   }
 
-  listTags() {
-    return this.prisma.tags.findMany({
-      select: {
-        name: true,
-      },
-    });
+  getAllTags() {
+    return this.prisma.tags.findMany({});
   }
 }

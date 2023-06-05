@@ -37,6 +37,7 @@ async function main() {
 
   console.log('Donors created:', donor1, donor2);
 
+  // Create categories
   const category1 = await prisma.category.create({
     data: {
       name: 'category 1',
@@ -49,38 +50,45 @@ async function main() {
     },
   });
 
-  // Create community types
-  const communityType1 = await prisma.tags.create({
+  console.log('Categories created:', category1, category2);
+
+  // Create tags
+  const tag1 = await prisma.tags.create({
     data: {
-      name: 'Community Type 1',
+      name: 'Tag 1',
     },
   });
 
-  const communityType2 = await prisma.tags.create({
+  const tag2 = await prisma.tags.create({
     data: {
-      name: 'Community Type 2',
+      name: 'Tag 2',
     },
   });
 
-  console.log('Community types created:', communityType1, communityType2);
+  console.log('Tags created:', tag1, tag2);
 
   // Create communities
   const community1 = await prisma.community.create({
     data: {
-      name: 'Rahat Jaleshwor',
-      manager: 'Manager Rahat',
-      description: 'Rahat Jaleshwor is a community in Nepal',
+      name: 'Community 1',
+      manager: 'Manager 1',
+      description: 'Description of Community 1',
       longitude: '27.1700',
       latitude: '86.9833',
       logo: '',
       cover: '',
-      country: 'Napal',
-      categoryId: category2.id,
-      totalDonationsUsd: '$ 1500',
+      country: 'Nepal',
+      walletAddress: '0x00y',
+      category: {
+        connect: {
+          id: category2.id,
+        },
+      },
+      totalDonations_usd: '1500',
       tags: {
         connect: [
           {
-            id: communityType1.id,
+            id: tag1.id,
           },
         ],
       },
@@ -90,69 +98,73 @@ async function main() {
   const community2 = await prisma.community.create({
     data: {
       name: 'Community 2',
+      manager: 'Manager 2',
       description: 'Description of Community 2',
       longitude: '0.0000',
       latitude: '0.0000',
       logo: '',
-      manager: 'Manager',
       cover: '',
-      country: 'Nefol',
-      categoryId: category1.id,
-      totalDonationsUsd: '$ 1500',
+      country: 'Nepal',
+      walletAddress: '0x00',
+      category: {
+        connect: {
+          id: category1.id,
+        },
+      },
+      totalDonations_usd: '1500',
       tags: {
         connect: [
           {
-            id: communityType1.id,
+            id: tag1.id,
           },
           {
-            id: communityType2.id,
+            id: tag2.id,
           },
         ],
       },
     },
   });
-
   console.log('Communities created:', community1, community2);
 
-  // Create community reports
-  const communityReport1 = await prisma.demographics.create({
+  // Create demographics
+  const demographics1 = await prisma.demographics.create({
     data: {
       communityId: community1.id,
-      internet_no: '20',
-      internet_yes: '20',
-      total_beneficiaries: '222',
-      bank_no: '200',
-      bank_yes: '22',
-      gender_male: '5',
+      total_beneficiaries: '100',
+      gender_male: '50',
+      gender_female: '40',
+      gender_other: '10',
+      bank_yes: '80',
+      bank_no: '20',
+      internet_yes: '90',
+      internet_no: '10',
       extra: {
         key: 'value',
       },
-      gender_female: '56',
-      gender_other: '4',
     },
   });
 
-  const communityReport2 = await prisma.demographics.create({
+  const demographics2 = await prisma.demographics.create({
     data: {
       communityId: community2.id,
+      total_beneficiaries: '200',
+      gender_male: '100',
+      gender_female: '80',
+      gender_other: '20',
+      bank_yes: '160',
+      bank_no: '40',
+      internet_yes: '180',
       internet_no: '20',
-      internet_yes: '20',
-      total_beneficiaries: '222',
-      bank_no: '200',
-      bank_yes: '22',
-      gender_male: '5',
       extra: {
         key: 'value',
       },
-      gender_female: '56',
-      gender_other: '4',
     },
   });
 
-  console.log('Community reports created:', communityReport1, communityReport2);
+  console.log('Demographics created:', demographics1, demographics2);
 
-  // Create donation transactions
-  const donation1 = await prisma.transactions.create({
+  // Create transactions
+  const transaction1 = await prisma.transactions.create({
     data: {
       timestamp: new Date(),
       donorId: donor1.id,
@@ -162,63 +174,17 @@ async function main() {
     },
   });
 
-  const donation2 = await prisma.transactions.create({
+  const transaction2 = await prisma.transactions.create({
     data: {
       timestamp: new Date(),
-      donorId: donor1.id,
-      doneeId: community1.id,
+      donorId: donor2.id,
+      doneeId: community2.id,
       txnHash: 'transaction-hash-2',
-      amount: 500,
+      amount: 200,
     },
   });
 
-  console.log('Donation transactions created:', donation1, donation2);
-
-  // Create projects
-  // const project1 = await prisma.project.create({
-  //   data: {
-  //     name: 'Project 1',
-  //     description: 'Description of Project 1',
-  //     manager: 'Project Manager 1',
-  //     communities: { connect: [{ id: community1.id }] },
-  //   },
-  // });
-
-  // const project2 = await prisma.project.create({
-  //   data: {
-  //     name: 'Project 2',
-  //     description: 'Description of Project 2',
-  //     manager: 'Project Manager 2',
-  //     communities: { connect: [{ id: community1.id }, { id: community2.id }] },
-  //   },
-  // });
-
-  // console.log('Projects created:', project1, project2);
-
-  // Create community transactions
-  // const communityTransaction1 = await prisma.communityTransasction.create({
-  //   data: {
-  //     communityId: community1.id,
-  //     txnHash: 'community-transaction-hash-1',
-  //     txnDate: new Date(),
-  //     status: TxnsStatus.SUCCESS,
-  //   },
-  // });
-
-  // const communityTransaction2 = await prisma.communityTransasction.create({
-  //   data: {
-  //     communityId: community2.id,
-  //     txnHash: 'community-transaction-hash-2',
-  //     txnDate: new Date(),
-  //     status: TxnsStatus.FAILED,
-  //   },
-  // });
-
-  // console.log(
-  //   'Community transactions created:',
-  //   communityTransaction1,
-  //   communityTransaction2,
-  // );
+  console.log('Transactions created:', transaction1, transaction2);
 }
 
 main()

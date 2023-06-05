@@ -124,7 +124,7 @@ export class CommunityService {
     });
   }
 
-  createBulkTags(tags: string[]) {
+  async createBulkTags(tags: string[]) {
     const tagsData: Prisma.TagsCreateManyInput[] = tags.map((tag) => {
       return { name: tag };
     });

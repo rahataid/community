@@ -11,6 +11,7 @@ export class CommunityService {
 
   create(createCommunityDto: CreateCommunityDto) {
     const { tags, summary, categoryId, ...communityData } = createCommunityDto;
+    console.log('tags', tags);
 
     return this.prisma.community.create({
       data: {
@@ -55,6 +56,7 @@ export class CommunityService {
         longitude: true,
         description: true,
         address: true,
+        images: true,
       },
 
       orderBy: {
@@ -73,7 +75,6 @@ export class CommunityService {
       },
       include: {
         summary: true,
-
         category: true,
       },
     });
@@ -90,8 +91,20 @@ export class CommunityService {
     return this.prisma.community.delete({ where: { id } });
   }
 
-  updateAsset(id: number, assetData: UpdateCommunityAssetDto) {
+  async updateAsset(id: number, assetData: UpdateCommunityAssetDto) {
     const updateData: UpdateCommunityAssetDto = {};
+
+    const community = await this.prisma.community.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!community) {
+      throw new Error('Community not found');
+    }
+
+    const commImage = community.images;
 
     if (assetData.logo) {
       updateData.logo = assetData.logo;
@@ -107,7 +120,13 @@ export class CommunityService {
 
     return this.prisma.community.update({
       where: { id },
-      data: updateData,
+      data: {
+        images: {
+          //@ts-ignore
+          ...commImage,
+          ...updateData,
+        },
+      },
     });
   }
 

@@ -13,7 +13,10 @@ import { CommunityService } from './community.service';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { CreateTagsDto } from './dto/create-tags.dto';
 import { CreateManager } from './dto/manager.dto';
-import { UpdateCommunityDto } from './dto/update-community.dto';
+import {
+  UpdateCommunityAssetDto,
+  UpdateCommunityDto,
+} from './dto/update-community.dto';
 
 @Controller('communities')
 @ApiTags('communities')
@@ -50,7 +53,10 @@ export class CommunityController {
   }
 
   @Patch(':id/asset')
-  updateAsset(@Param('id') id: string, @Body() assetData: UpdateCommunityDto) {
+  updateAsset(
+    @Param('id') id: string,
+    @Body() assetData: UpdateCommunityAssetDto,
+  ) {
     return this.communitiesService.updateAsset(+id, assetData);
   }
 

@@ -36,21 +36,38 @@ const lib = {
       console.log('Posting Data', dataIndex);
       const rowData = rows[dataIndex];
 
-      const { summaries, pilot, manager, ...commData } =
-        sanitizedData[dataIndex];
+      const {
+        summaries,
+        pilot,
+        manager,
+        tags,
+        transactions,
+        category,
+        ...commData
+      } = sanitizedData[dataIndex];
 
       console.log('commData', commData);
-      const { data: communityData } = await communityHost.post('/communities', {
+      const createData = {
         ...commData,
+        managers: [manager],
         summary: summaries,
-      });
+        categoryId: category,
+
+        tags: [tags],
+      };
+
+      console.log('createData', createData);
+      const { data: communityData } = await communityHost.post(
+        '/communities',
+        createData,
+      );
       console.log('data', communityData);
 
-      const { data } = await communityHost.post('/communities/manager', {
-        communities: [commData.address],
-        name: manager,
-      });
-      console.log('reacted manager', data);
+      // const { data } = await communityHost.post('/communities/manager', {
+      //   communities: [commData.address],
+      //   name: manager,
+      // });
+      // console.log('reacted manager', data);
 
       console.log('Saved', dataIndex + 1 + ' of ' + sanitizedData.length);
     }
@@ -65,14 +82,18 @@ const lib = {
   sanitizeRow(row) {
     return {
       name: row?.name?.replace(/\r?\n/g, '').trim(),
-      category: row?.category || 7,
+      category: Number(row?.category) || 7,
       manager: row.manager || '',
       description: row?.description?.replace(/\r?\n/g, '').trim() || '',
-      logo: row.logo ? formatGoogleDriveURL(row.logo) : '',
-      totalDonations_usd: String(row.tx_usd) || '',
-      longitude: String(row.longitude) || '',
-      latitude: row.latitude || '',
-      cover: row.cover ? formatGoogleDriveURL(row.cover) : '',
+      tags: row?.tags,
+      images: {
+        logo: row.logo ? formatGoogleDriveURL(row.logo) : '',
+        cover: row.cover ? formatGoogleDriveURL(row.cover) : '',
+        gallery: [],
+      },
+      totalDonations_usd: Math.round(Number(row.tx_usd)) || 0,
+      longitude: Number(row.longitude) || '',
+      latitude: Number(row.latitude) || '',
       country: row?.country || 'Nepal',
       pilot:
         row?.tx_description
@@ -80,25 +101,24 @@ const lib = {
           .replace(' ', '_')
           .replace('.0', '') || '',
       address: row?.address || null,
-      photos: [],
 
       transactions: {
         description: row.tx_description,
-        npr: row.tx_npr,
-        usd: row.tx_usd,
+        npr: row.tx_npr || 0,
+        usd: row.tx_usd || 0,
       },
       summaries: {
-        total_beneficiaries: row.total_beneficiaries,
-        gender_male: row.gender_male || '',
-        gender_female: row.gender_female || '',
-        gender_other: row.gender_other || '',
-        bank_yes: row.bank_yes || '',
-        bank_no: row.bank_no || '',
-        // phone_yes: row.phone_yes || null,
-        // phone_no: row.phone_no || null,
-        internet_yes: row.internet_yes || '',
-        internet_no: row.internet_no || '',
-        extra: {},
+        total_beneficiaries: +row.total_beneficiaries || 0,
+        gender_male: +row.gender_male || 0,
+        gender_female: +row.gender_female || 0,
+        gender_other: +row.gender_other || 0,
+        bank_yes: +row.bank_yes || 0,
+        bank_no: +row.bank_no || 0,
+        // phone_yes: +row.phone_yes || null,
+        // phone_no: +row.phone_no || null,
+        internet_yes: +row.internet_yes || 0,
+        internet_no: +row.internet_no || 0,
+        extras: {},
       },
       // Add other properties you want to include in the JSON output
     };

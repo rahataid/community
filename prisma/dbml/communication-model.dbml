@@ -11,7 +11,7 @@ Table tbl_communities {
   id Int [pk, increment]
   address String [unique, not null]
   name String [not null]
-  description String
+  description String [not null]
   longitude Float
   latitude Float
   country String [not null]

@@ -21,8 +21,8 @@ export function ResponseHandler(): MethodDecorator {
         const result = await originalMethod.apply(this, args);
         return result;
       } catch (error) {
-        let message = 'An unknown error occurred';
-        let status = HttpStatus.INTERNAL_SERVER_ERROR;
+        const message = 'An unknown error occurred';
+        const status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         if (status >= 500) {
           console.error(error);

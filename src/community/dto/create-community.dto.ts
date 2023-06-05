@@ -12,6 +12,22 @@ export class CreateCommunityDto {
 
   @ApiProperty({
     type: 'string',
+    example: 'Tayaba',
+    description: 'Address Of Community',
+  })
+  @IsString()
+  address: string;
+
+  @ApiProperty({
+    type: 'number',
+    example: 1,
+    description: 'Community Category',
+  })
+  @IsNumber()
+  categoryId: number;
+
+  @ApiProperty({
+    type: 'string',
     example: 'h20 Relief distribution',
     description: 'H20 relief distribution',
     required: false,
@@ -20,22 +36,22 @@ export class CreateCommunityDto {
   description?: string;
 
   @ApiProperty({
-    type: 'string',
-    example: '',
+    type: 'number',
+    example: '10.11',
     description: 'Latitude of community',
     required: false,
   })
-  @IsString()
-  latitude?: string;
+  @IsNumber()
+  latitude?: number;
 
   @ApiProperty({
-    type: 'string',
-    example: '',
+    type: 'number',
+    example: '100.72',
     description: 'Longitude of community',
     required: false,
   })
-  @IsString()
-  longitude?: string;
+  @IsNumber()
+  longitude?: number;
 
   @ApiProperty({
     type: 'string',
@@ -47,63 +63,59 @@ export class CreateCommunityDto {
   country: string;
 
   @ApiProperty({
-    type: 'string',
-    example: '$ 500',
+    type: 'number',
+    example: 500,
     description: 'Budget of the community',
     required: false,
   })
-  @IsString()
-  totalDonations_usd: string;
-
-  @ApiProperty({
-    type: 'string',
-    example: '0x00',
-    description: 'Wallet Address of the community',
-    required: true,
-  })
-  @IsString()
-  walletAddress: string;
-
-  @ApiProperty({
-    type: 'string',
-    example: 'http://image.png',
-  })
-  @IsString()
-  logo?: string;
+  @IsNumber()
+  totalDonations_usd: number;
 
   @ApiProperty({
     type: 'array',
-    example: ['http://image.png'],
+    items: { type: 'string' },
+    example: ['mg1', 'mg2', 'mg3'],
+    description: 'Budget of the community',
     required: false,
   })
   @IsArray()
-  photos?: string[] | null;
+  managers: string;
 
   @ApiProperty({
-    type: 'string',
-    example: 'http://image.png',
+    type: 'json',
+    example: {
+      cover: 'Qmdgfw7c44YMbhHghNcFR5wF78J8BxniSKhr4qCPznQKzG',
+      logo: 'QmYpufyj4YRzHg9FPUoGAyvbgXtYaeUXHVSvDPsouBSk9H',
+      gallery: [
+        'QmYpufyj4YRzHg9FPUoGAyvbgXtYaeUXHVSvDPsouBSk9H',
+        'QmYpufyj4YRzHg9FPUoGAyvbgXtYaeUXHVSvDPsouBSk9H',
+      ],
+    },
   })
-  @IsString()
-  cover?: string;
-
-  @ApiProperty({
-    type: 'number',
-    example: 'http://image.png',
-  })
-  @IsNumber()
-  categoryId: number;
+  images: Record<string, string>;
 
   @ApiProperty({
     type: 'array',
-    items: { type: 'number' },
-    example: [1, 2],
+    items: { type: 'string' },
+    example: ['tag2', 'tag1'],
     description: 'Tags IDs of the community',
     required: false,
   })
   @IsArray()
-  @IsNumber({}, { each: true })
-  tags?: number[];
+  tags?: string[];
 
-  @ApiProperty({})
+  @ApiProperty({
+    example: {
+      extras: {},
+      total_beneficiaries: 22,
+      gender_male: 5,
+      gender_female: 49,
+      gender_other: 7,
+      bank_yes: 100,
+      bank_no: 50,
+      internet_yes: 20,
+      internet_no: 25,
+    },
+  })
   summary?: any;
 }

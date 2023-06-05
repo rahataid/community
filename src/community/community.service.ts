@@ -12,21 +12,16 @@ export class CommunityService {
   create(createCommunityDto: CreateCommunityDto) {
     const { tags, summary, categoryId, ...communityData } = createCommunityDto;
 
-    const communitytags = tags?.map((tagId) => ({
-      id: tagId,
-    }));
-
     return this.prisma.community.create({
       data: {
         ...communityData, // Explicit cast to the appropriate type
-        tags: {
-          connect: communitytags,
-        },
+        tags,
         category: {
           connect: {
             id: categoryId,
           },
         },
+
         summary: {
           create: {
             ...summary,
@@ -36,21 +31,30 @@ export class CommunityService {
     });
   }
 
-  findAll() {
+  findAll(query?: string) {
+    let queryCondition = {};
+    if (query) {
+      queryCondition = {
+        name: {
+          contains: query,
+          mode: 'insensitive',
+        },
+      };
+    }
     return this.prisma.community.findMany({
+      where: {
+        ...queryCondition,
+      },
       select: {
         category: true,
         country: true,
-        logo: true,
         name: true,
         id: true,
-        photos: true,
-        cover: true,
         totalDonations_usd: true,
-        walletAddress: true,
         latitude: true,
         longitude: true,
         description: true,
+        address: true,
       },
 
       orderBy: {
@@ -68,14 +72,8 @@ export class CommunityService {
         id,
       },
       include: {
-        managers: {
-          include: {
-            manager: true,
-          },
-        },
         summary: true,
 
-        tags: true,
         category: true,
       },
     });
@@ -94,17 +92,6 @@ export class CommunityService {
 
   updateAsset(id: number, assetData: UpdateCommunityAssetDto) {
     const updateData: UpdateCommunityAssetDto = {};
-
-    if (assetData.cover) {
-      updateData.cover = assetData.cover;
-    }
-    if (assetData.logo) {
-      updateData.logo = assetData.logo;
-    }
-
-    if (assetData.photos) {
-      updateData.photos = assetData.photos;
-    }
 
     return this.prisma.community.update({
       where: { id },
@@ -150,16 +137,9 @@ export class CommunityService {
   async createCommunityManager(manager: CreateManager) {
     const { communityId, ...data } = manager;
 
-    const createdManager = await this.prisma.communityManager.create({
+    return this.prisma.communityManager.create({
       data: {
         ...data,
-      },
-    });
-
-    return this.prisma.communityonCommunityManager.create({
-      data: {
-        communityId,
-        managerId: createdManager.id,
       },
     });
   }

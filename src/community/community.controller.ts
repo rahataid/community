@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CommunityService } from './community.service';
@@ -25,8 +26,8 @@ export class CommunityController {
   }
 
   @Get()
-  findAll() {
-    return this.communitiesService.findAll();
+  findAll(@Query() search?: string) {
+    return this.communitiesService.findAll(search);
   }
 
   @Get(':id')

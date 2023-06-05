@@ -44,7 +44,7 @@ model Community {
   totalDonations_usd Int                     @default(0)
   categoryId         Int
   category           Category                @relation(fields: [categoryId], references: [id])
-  summary            CommunityDemographics[]
+  summary            CommunityDemographics[]    
   tags               String[]                @default([])
   managers           String[]                @default([])
 

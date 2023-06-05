@@ -12,10 +12,10 @@ Table tbl_communities {
   address String [unique, not null]
   name String [not null]
   description String
-  longitude String
-  latitude String
+  longitude Float
+  latitude Float
   country String [not null]
-  totalDonations_usd String [not null]
+  totalDonations_usd Int [not null, default: 0]
   categoryId Int [not null]
   category tbl_categories [not null]
   summary tbl_communityDemographics [not null]
@@ -41,14 +41,14 @@ Table tbl_communityDemographics {
   id Int [pk, increment]
   community tbl_communities [not null]
   communityId Int [not null]
-  total_beneficiaries String [not null]
-  gender_male String
-  gender_female String
-  gender_other String
-  bank_yes String
-  bank_no String
-  internet_yes String [not null]
-  internet_no String [not null]
+  total_beneficiaries Int [not null, default: 0]
+  gender_male Int
+  gender_female Int
+  gender_other Int
+  bank_yes Int
+  bank_no Int
+  internet_yes Int
+  internet_no Int
   extras Json [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]

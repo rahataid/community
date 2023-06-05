@@ -2,7 +2,7 @@ import { Gender, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function main() {
+async function seed() {
   // Create beneficiaries
   const beneficiary1 = await prisma.beneficiary.create({
     data: {
@@ -71,7 +71,6 @@ async function main() {
   const community1 = await prisma.community.create({
     data: {
       name: 'Community 1',
-      manager: 'Manager 1',
       description: 'Description of Community 1',
       longitude: '27.1700',
       latitude: '86.9833',
@@ -79,26 +78,14 @@ async function main() {
       cover: '',
       country: 'Nepal',
       walletAddress: '0x00y',
-      category: {
-        connect: {
-          id: category2.id,
-        },
-      },
+      categoryId: category2.id,
       totalDonations_usd: '1500',
-      tags: {
-        connect: [
-          {
-            id: tag1.id,
-          },
-        ],
-      },
     },
   });
 
   const community2 = await prisma.community.create({
     data: {
       name: 'Community 2',
-      manager: 'Manager 2',
       description: 'Description of Community 2',
       longitude: '0.0000',
       latitude: '0.0000',
@@ -106,25 +93,27 @@ async function main() {
       cover: '',
       country: 'Nepal',
       walletAddress: '0x00',
-      category: {
-        connect: {
-          id: category1.id,
-        },
-      },
+      categoryId: category1.id,
       totalDonations_usd: '1500',
-      tags: {
-        connect: [
-          {
-            id: tag1.id,
-          },
-          {
-            id: tag2.id,
-          },
-        ],
-      },
     },
   });
+
   console.log('Communities created:', community1, community2);
+
+  const manager = await prisma.communityManager.create({
+    data: {
+      email: 'email@gmail.com',
+      name: 'Community Manager',
+      walletAddress: '0x00',
+    },
+  });
+
+  await prisma.communityonCommunityManager.create({
+    data: {
+      communityId: community1.id,
+      managerId: manager.id,
+    },
+  });
 
   // Create demographics
   const demographics1 = await prisma.demographics.create({
@@ -187,7 +176,7 @@ async function main() {
   console.log('Transactions created:', transaction1, transaction2);
 }
 
-main()
+seed()
   .catch((e) => {
     console.error(e);
     process.exit(1);

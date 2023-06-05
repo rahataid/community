@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommunityDto } from './dto/create-community.dto';
+import { CreateManager } from './dto/manager.dto';
 import { UpdateCommunityAssetDto } from './dto/update-community.dto';
 
 @Injectable()
@@ -51,6 +52,7 @@ export class CommunityService {
         longitude: true,
         description: true,
       },
+
       orderBy: {
         updatedAt: 'asc',
       },
@@ -63,6 +65,11 @@ export class CommunityService {
         id,
       },
       include: {
+        managers: {
+          include: {
+            manager: true,
+          },
+        },
         summary: true,
 
         tags: {
@@ -123,5 +130,22 @@ export class CommunityService {
 
   getAllTags() {
     return this.prisma.tags.findMany({});
+  }
+
+  async createCommunityManager(manager: CreateManager) {
+    const { communityId, ...data } = manager;
+
+    const createdManager = await this.prisma.communityManager.create({
+      data: {
+        ...data,
+      },
+    });
+
+    return this.prisma.communityonCommunityManager.create({
+      data: {
+        communityId,
+        managerId: createdManager.id,
+      },
+    });
   }
 }

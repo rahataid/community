@@ -25,7 +25,6 @@ enum Gender {
 model Community {
   id                 Int            @id @default(autoincrement())
   name               String
-  manager            String
   description        String?
   longitude          String?
   latitude           String?
@@ -42,7 +41,25 @@ model Community {
   transactions       Transactions[]
   tags               Tags[]         @relation("CommunityTagRelation")
   category           Category       @relation(fields: [categoryId], references: [id])
+  managers           CommunityonCommunityManager[]
 }
+
+model CommunityManager {
+  id         Int        @id @default(autoincrement())
+  name       String
+  email      String
+  walletAddress     String
+  community  CommunityonCommunityManager[]
+}
+
+model CommunityonCommunityManager {
+  id         Int        @id @default(autoincrement())
+  community  Community  @relation(fields: [communityId], references: [id])
+  manager    CommunityManager  @relation(fields: [managerId], references: [id])
+  communityId Int
+  managerId Int
+}
+
 
 model Tags {
   id          Int         @id @default(autoincrement())
@@ -101,3 +118,5 @@ model Category {
   name        String
   communities Community[]
 }
+
+

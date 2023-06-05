@@ -7,8 +7,8 @@ const axios = require('axios');
 const generateWallet = require('./generateWallet');
 
 const communityHost = axios.create({
-  baseURL: 'https://community-api-stage.rahat.io',
-  // baseURL: 'http://localhost:5300',
+  // baseURL: 'https://community-api-stage.rahat.io',
+  baseURL: 'http://localhost:5300',
 });
 
 function formatGoogleDriveURL(url) {
@@ -68,6 +68,7 @@ const lib = {
         walletAddress_real,
         walletAddress_generated,
         pilot,
+        manager,
         ...commData
       } = sanitizedData[dataIndex];
 
@@ -93,13 +94,21 @@ const lib = {
       });
 
       console.log('commData', commData, tags);
-      const { data } = await communityHost.post('/communities', {
+      const { data: communityData } = await communityHost.post('/communities', {
         ...commData,
         summary: summaries,
         categoryId: tags[0],
         tags,
       });
-      console.log('data', data);
+      console.log('data', communityData);
+
+      const { data } = await communityHost.post('/communities/manager', {
+        communityId: communityData.id,
+        name: manager,
+        email: 'email@gmail.com',
+        walletAddress: '0x00',
+      });
+      console.log('reacted manager', data);
 
       console.log('Saved', dataIndex + 1 + ' of ' + sanitizedData.length);
     }

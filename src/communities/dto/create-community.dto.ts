@@ -12,14 +12,6 @@ export class CreateCommunityDto {
 
   @ApiProperty({
     type: 'string',
-    example: 'Tayaba',
-    description: 'manager Of Community',
-  })
-  @IsString()
-  manager: string;
-
-  @ApiProperty({
-    type: 'string',
     example: 'h20 Relief distribution',
     description: 'H20 relief distribution',
     required: false,

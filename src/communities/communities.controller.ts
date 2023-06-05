@@ -11,6 +11,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CommunityService } from './communities.service';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { CreateTagsDto } from './dto/create-tags.dto';
+import { CreateManager } from './dto/manager.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 
 @Controller('communities')
@@ -59,5 +60,10 @@ export class CommunitiesController {
   @Get('tags')
   getAllTags() {
     return this.communitiesService.getAllTags();
+  }
+
+  @Post('/manager')
+  createCommunityManager(@Body() manager: CreateManager) {
+    return this.communitiesService.createCommunityManager(manager);
   }
 }

@@ -34,100 +34,81 @@ enum Gender {
 }
 
 model Community {
-  id                 Int            @id @default(autoincrement())
+  id                 Int                     @id @default(autoincrement())
+  address            String                  @unique()
   name               String
   description        String?
-  longitude          String?
-  latitude           String?
-  logo               String?        @default("")
-  cover              String?        @default("")
-  photos             String[]       @default([])
-  totalDonations_usd String
-  categoryId         Int
-  walletAddress      String         @unique()
+  longitude          Float?
+  latitude           Float?
   country            String
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-  summary            Demographics[]
-  transactions       Transactions[]
-  tags               Tags[]         @relation("CommunityTagRelation")
-  category           Category       @relation(fields: [categoryId], references: [id])
-  managers           CommunityonCommunityManager[]
+  totalDonations_usd Int                     @default(0)
+  categoryId         Int
+  category           Category                @relation(fields: [categoryId], references: [id])
+  summary            CommunityDemographics[]
+  tags               String[]                @default([])
+  managers           String[]                @default([])
+
+  // images
+  // {
+  //   "cover": "Qmdgfw7c44YMbhHghNcFR5wF78J8BxniSKhr4qCPznQKzG",
+  //   "logo": "QmYpufyj4YRzHg9FPUoGAyvbgXtYaeUXHVSvDPsouBSk9H",
+  //   "gallery": ["QmYpufyj4YRzHg9FPUoGAyvbgXtYaeUXHVSvDPsouBSk9H", "QmYpufyj4YRzHg9FPUoGAyvbgXtYaeUXHVSvDPsouBSk9H"]
+  // }
+  
+  images             Json
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+
+  @@map(name: "tbl_communities")
 }
 
 model CommunityManager {
-  id         Int        @id @default(autoincrement())
-  name       String
-  email      String
-  walletAddress     String
-  community  CommunityonCommunityManager[]
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String?
+  phone         String?
+  walletAddress String?
+  communities   String[] @default([])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt //list of community addresses
+
+  @@map(name: "tbl_communityManagers")
 }
 
-model CommunityonCommunityManager {
-  id         Int        @id @default(autoincrement())
-  community  Community  @relation(fields: [communityId], references: [id])
-  manager    CommunityManager  @relation(fields: [managerId], references: [id])
-  communityId Int
-  managerId Int
-}
+model CommunityDemographics {
+  id                  Int       @id @default(autoincrement())
+  community           Community @relation(fields: [communityId], references: [id])
+  communityId         Int
+  total_beneficiaries Int       @default(0)
+  gender_male         Int?
+  gender_female       Int?
+  gender_other        Int?
+  bank_yes            Int?
+  bank_no             Int?
+  internet_yes        Int?
+  internet_no         Int?
+  extras              Json
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
+  @@map(name: "tbl_communityDemographics")
+}
 
 model Tags {
-  id          Int         @id @default(autoincrement())
-  name        String
-  communities Community[] @relation("CommunityTagRelation")
-}
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-model Demographics {
-  id                  Int       @id @default(autoincrement())
-  communityId         Int
-  total_beneficiaries String
-  gender_male         String?
-  gender_female       String?
-  gender_other        String?
-  bank_yes            String?
-  bank_no             String?
-  internet_yes        String
-  internet_no         String
-  extra               Json
-  community           Community @relation(fields: [communityId], references: [id])
-}
-
-model Beneficiary {
-  id            Int      @id @default(autoincrement())
-  gender        Gender
-  walletAddress String?
-  age           Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-enum DonorType {
-  organization
-  individual
-}
-
-model Donor {
-  id            Int            @id @default(autoincrement())
-  walletAddress String
-  transactions  Transactions[]
-}
-
-model Transactions {
-  id        Int       @id @default(autoincrement())
-  timestamp DateTime  @default(now())
-  donor     Donor     @relation(fields: [donorId], references: [id])
-  donorId   Int
-  donee     Community @relation(fields: [doneeId], references: [id])
-  doneeId   Int
-  txnHash   String?
-  amount    Float
+  @@map(name: "tbl_tags")
 }
 
 model Category {
   id          Int         @id @default(autoincrement())
   name        String
   communities Community[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map(name: "tbl_categories")
 }
-
-

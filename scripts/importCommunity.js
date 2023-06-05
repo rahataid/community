@@ -29,31 +29,6 @@ const lib = {
     const sheet = doc.sheetsByTitle[SHEET_NAME];
     let rows = await sheet.getRows();
 
-    console.log('Extracting Tags');
-
-    const tags = Array.from(
-      new Set(
-        rows
-          .map((el) => {
-            const trimmedType = el.tags;
-            if (trimmedType && trimmedType !== '') {
-              return trimmedType.split(',').map((value) => value.trim());
-            }
-            return [];
-          })
-          .flat()
-          .filter((tag) => tag !== undefined || tag !== '' || tag !== null),
-      ),
-    );
-
-    console.log('Posting Tags');
-    const { data } = await communityHost.post('/communities/tags/bulk', {
-      tags,
-    });
-    // console.log('data', data);
-    // const { data: allTags } = await communityHost.get('/communities/tags');
-    // console.log('allTags', allTags);
-
     console.log('Sanitizing Data');
     const sanitizedData = this.sanitizeRows(rows);
 
@@ -61,53 +36,19 @@ const lib = {
       console.log('Posting Data', dataIndex);
       const rowData = rows[dataIndex];
 
-      const {
-        summaries,
-        transactions,
-        tags: tagsString,
-        walletAddress_real,
-        walletAddress_generated,
-        pilot,
-        manager,
-        ...commData
-      } = sanitizedData[dataIndex];
-
-      if (!rowData.walletAddress_generated || !rowData.walletAddress_real) {
-        console.log('Generating Wallet for', pilot, commData?.name);
-        const generatedWallet = await generateWallet(pilot);
-
-        rowData.walletAddress_real = walletAddress_real || null;
-        rowData.walletAddress_generated =
-          walletAddress_generated || generatedWallet?.address;
-
-        commData.walletAddress =
-          rowData?.walletAddress_real || rowData?.walletAddress_generated;
-
-        await rowData.save();
-      } else {
-        commData.walletAddress = walletAddress_real || walletAddress_generated;
-      }
-
-      // const tags = tagsString.split(',').map((tagString) => {
-      //   const foundTag = allTags.find((tag) => tag.name === tagString.trim());
-      //   return foundTag ? foundTag.id : null;
-      // });
+      const { summaries, pilot, manager, ...commData } =
+        sanitizedData[dataIndex];
 
       console.log('commData', commData);
       const { data: communityData } = await communityHost.post('/communities', {
         ...commData,
         summary: summaries,
-        categoryId: 1,
-        // categoryId: tags[0],
-        tags: [1, 2],
       });
       console.log('data', communityData);
 
       const { data } = await communityHost.post('/communities/manager', {
-        communityId: communityData.id,
+        communities: [commData.address],
         name: manager,
-        email: 'email@gmail.com',
-        walletAddress: '0x00',
       });
       console.log('reacted manager', data);
 
@@ -123,8 +64,8 @@ const lib = {
 
   sanitizeRow(row) {
     return {
-      tags: row.tags,
       name: row?.name?.replace(/\r?\n/g, '').trim(),
+      category: row?.category || 7,
       manager: row.manager || '',
       description: row?.description?.replace(/\r?\n/g, '').trim() || '',
       logo: row.logo ? formatGoogleDriveURL(row.logo) : '',
@@ -138,8 +79,7 @@ const lib = {
           ?.toLowerCase()
           .replace(' ', '_')
           .replace('.0', '') || '',
-      walletAddress_real: row?.walletAddress_real || null,
-      walletAddress_generated: row?.walletAddress_generated || null,
+      address: row?.address || null,
       photos: [],
 
       transactions: {

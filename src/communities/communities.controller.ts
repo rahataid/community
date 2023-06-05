@@ -106,4 +106,9 @@ export class CommunitiesController {
   // listTransactions(@Param('id') id: number) {
   //   return this.communitiesService.(+id);
   // }
+
+  @Get('/search/:searchKey')
+  searchCommunity(@Param('searchKey') searchKey: string) {
+    return this.communitiesService.search(searchKey);
+  }
 }

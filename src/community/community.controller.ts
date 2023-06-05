@@ -26,7 +26,7 @@ export class CommunityController {
   }
 
   @Get()
-  findAll(@Query() search?: string) {
+  findAll(@Query('search') search?: string) {
     return this.communitiesService.findAll(search);
   }
 

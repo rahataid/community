@@ -50,9 +50,9 @@ const lib = {
     const { data } = await communityHost.post('/communities/tags/bulk', {
       tags,
     });
-    console.log('data', data);
-    const { data: allTags } = await communityHost.get('/communities/tags');
-    console.log('allTags', allTags);
+    // console.log('data', data);
+    // const { data: allTags } = await communityHost.get('/communities/tags');
+    // console.log('allTags', allTags);
 
     console.log('Sanitizing Data');
     const sanitizedData = this.sanitizeRows(rows);
@@ -88,17 +88,18 @@ const lib = {
         commData.walletAddress = walletAddress_real || walletAddress_generated;
       }
 
-      const tags = tagsString.split(',').map((tagString) => {
-        const foundTag = allTags.find((tag) => tag.name === tagString.trim());
-        return foundTag ? foundTag.id : null;
-      });
+      // const tags = tagsString.split(',').map((tagString) => {
+      //   const foundTag = allTags.find((tag) => tag.name === tagString.trim());
+      //   return foundTag ? foundTag.id : null;
+      // });
 
-      console.log('commData', commData, tags);
+      console.log('commData', commData);
       const { data: communityData } = await communityHost.post('/communities', {
         ...commData,
         summary: summaries,
-        categoryId: tags[0],
-        tags,
+        categoryId: 1,
+        // categoryId: tags[0],
+        tags: [1, 2],
       });
       console.log('data', communityData);
 

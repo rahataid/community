@@ -1,27 +1,21 @@
-import { ValidationPipe } from '@nestjs/common';
+// src/main.ts
+
 import { NestFactory } from '@nestjs/core';
-// import {
-//   FastifyAdapter,
-//   NestFastifyApplication,
-// } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@pipes/validation.pipe';
+import { PORT } from 'src/config';
 import { AppModule } from './app.module';
-import { PORT } from './config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // const app = await NestFactory.create<NestFastifyApplication>(
-  //   AppModule,
-  //   new FastifyAdapter(),
-  // );
 
   app.enableCors();
 
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
-    .setTitle('Community Api')
-    .setDescription('Rahat Communities')
+    .setTitle('Community Service')
+    .setDescription('Rahat Community')
     .setVersion('0.1')
     .build();
 
@@ -33,5 +27,4 @@ async function bootstrap() {
 
   await app.listen(PORT);
 }
-
 bootstrap();

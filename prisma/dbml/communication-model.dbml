@@ -1,0 +1,128 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Project "Communication Campaign" {
+  database_type: 'PostgreSQL'
+  Note: 'Communication Campaign'
+}
+
+Table Community {
+  id Int [pk, increment]
+  name String [not null]
+  description String
+  longitude String
+  latitude String
+  logo String [default: '']
+  cover String [default: '']
+  photos String[] [not null]
+  totalDonations_usd String [not null]
+  categoryId Int [not null]
+  walletAddress String [unique, not null]
+  country String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  summary Demographics [not null]
+  transactions Transactions [not null]
+  tags Tags [not null]
+  category Category [not null]
+  managers CommunityonCommunityManager [not null]
+}
+
+Table CommunityManager {
+  id Int [pk, increment]
+  name String [not null]
+  email String [not null]
+  walletAddress String [not null]
+  community CommunityonCommunityManager [not null]
+}
+
+Table CommunityonCommunityManager {
+  id Int [pk, increment]
+  community Community [not null]
+  manager CommunityManager [not null]
+  communityId Int [not null]
+  managerId Int [not null]
+}
+
+Table Tags {
+  id Int [pk, increment]
+  name String [not null]
+  communities Community [not null]
+}
+
+Table Demographics {
+  id Int [pk, increment]
+  communityId Int [not null]
+  total_beneficiaries String [not null]
+  gender_male String
+  gender_female String
+  gender_other String
+  bank_yes String
+  bank_no String
+  internet_yes String [not null]
+  internet_no String [not null]
+  extra Json [not null]
+  community Community [not null]
+}
+
+Table Beneficiary {
+  id Int [pk, increment]
+  gender Gender [not null]
+  walletAddress String
+  age Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Donor {
+  id Int [pk, increment]
+  walletAddress String [not null]
+  transactions Transactions [not null]
+}
+
+Table Transactions {
+  id Int [pk, increment]
+  timestamp DateTime [default: `now()`, not null]
+  donor Donor [not null]
+  donorId Int [not null]
+  donee Community [not null]
+  doneeId Int [not null]
+  txnHash String
+  amount Float [not null]
+}
+
+Table Category {
+  id Int [pk, increment]
+  name String [not null]
+  communities Community [not null]
+}
+
+Enum TxnsStatus {
+  SUCCESS
+  PENDING
+  FAILED
+}
+
+Enum Gender {
+  M
+  F
+  O
+}
+
+Enum DonorType {
+  organization
+  individual
+}
+
+Ref: Community.categoryId > Category.id
+
+Ref: CommunityonCommunityManager.communityId > Community.id
+
+Ref: CommunityonCommunityManager.managerId > CommunityManager.id
+
+Ref: Demographics.communityId > Community.id
+
+Ref: Transactions.donorId > Donor.id
+
+Ref: Transactions.doneeId > Community.id

@@ -1,9 +1,8 @@
 # compiled output
 /dist
 /node_modules
-.env
-/config
-
+.yarn/
+.yarnrc.yml
 # Logs
 logs
 *.log
@@ -12,6 +11,8 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+config/
+scripts/
 
 # OS
 .DS_Store
@@ -35,3 +36,4 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.env

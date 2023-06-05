@@ -1,5 +1,5 @@
 # Base image
-FROM node:18-alpine3.17
+FROM node:18-alpine
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -24,7 +24,12 @@ COPY . .
 RUN npm run build
 
 # Expose port 3000 for the application
-# EXPOSE 3000
+EXPOSE 3000
 
 # Start the server using the production build
 CMD [ "node", "dist/src/main.js" ]
+
+
+
+
+

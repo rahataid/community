@@ -93,6 +93,18 @@ export class CommunityService {
   updateAsset(id: number, assetData: UpdateCommunityAssetDto) {
     const updateData: UpdateCommunityAssetDto = {};
 
+    if (assetData.logo) {
+      updateData.logo = assetData.logo;
+    }
+
+    if (assetData.cover) {
+      updateData.cover = assetData.cover;
+    }
+
+    if (assetData.gallery) {
+      updateData.gallery = assetData.gallery;
+    }
+
     return this.prisma.community.update({
       where: { id },
       data: updateData,

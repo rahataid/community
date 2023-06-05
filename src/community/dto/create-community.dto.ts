@@ -33,7 +33,7 @@ export class CreateCommunityDto {
     required: false,
   })
   @IsString()
-  description?: string;
+  description: string;
 
   @ApiProperty({
     type: 'number',

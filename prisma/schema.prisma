@@ -37,7 +37,7 @@ model Community {
   id                 Int                     @id @default(autoincrement())
   address            String                  @unique()
   name               String
-  description        String?
+  description        String
   longitude          Float?
   latitude           Float?
   country            String
@@ -47,14 +47,6 @@ model Community {
   summary            CommunityDemographics[]    
   tags               String[]                @default([])
   managers           String[]                @default([])
-
-  // images
-  // {
-  //   "cover": "Qmdgfw7c44YMbhHghNcFR5wF78J8BxniSKhr4qCPznQKzG",
-  //   "logo": "QmYpufyj4YRzHg9FPUoGAyvbgXtYaeUXHVSvDPsouBSk9H",
-  //   "gallery": ["QmYpufyj4YRzHg9FPUoGAyvbgXtYaeUXHVSvDPsouBSk9H", "QmYpufyj4YRzHg9FPUoGAyvbgXtYaeUXHVSvDPsouBSk9H"]
-  // }
-  
   images             Json
   createdAt          DateTime                @default(now())
   updatedAt          DateTime                @updatedAt

@@ -7,19 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-generator dbml {
-  provider            = "prisma-dbml-generator"
-  output              = "./dbml"
-  outputName          = "communication-model.dbml"
-  projectName         = "Communication Campaign"
-  projectDatabaseType = "PostgreSQL"
-  projectNote         = "Communication Campaign"
-}
+// generator dbml {
+//   provider            = "prisma-dbml-generator"
+//   output              = "./dbml"
+//   outputName          = "communication-model.dbml"
+//   projectName         = "Communication Campaign"
+//   projectDatabaseType = "PostgreSQL"
+//   projectNote         = "Communication Campaign"
+// }
 
-generator docs {
-  provider = "node node_modules/prisma-docs-generator"
-  output   = "./docs"
-}
+// generator docs {
+//   provider = "node node_modules/prisma-docs-generator"
+//   output   = "./docs"
+// }
 
 enum TxnsStatus {
   SUCCESS
@@ -27,11 +27,7 @@ enum TxnsStatus {
   FAILED
 }
 
-enum Gender {
-  M
-  F
-  O
-}
+
 
 model Community {
   id                 Int                     @id @default(autoincrement())

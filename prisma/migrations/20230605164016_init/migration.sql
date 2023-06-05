@@ -9,7 +9,7 @@ CREATE TABLE "tbl_communities" (
     "id" SERIAL NOT NULL,
     "address" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "description" TEXT,
+    "description" TEXT NOT NULL,
     "longitude" DOUBLE PRECISION,
     "latitude" DOUBLE PRECISION,
     "country" TEXT NOT NULL,

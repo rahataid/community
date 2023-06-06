@@ -7,7 +7,7 @@ import { UpdateCommunityAssetDto } from './dto/update-community.dto';
 
 @Injectable()
 export class CommunityService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   create(createCommunityDto: CreateCommunityDto) {
     const { tags, summary, categoryId, ...communityData } = createCommunityDto;
@@ -65,13 +65,13 @@ export class CommunityService {
     });
   }
 
-  findOne(id: number) {
-    if (!id) {
-      throw new Error('Id not provided');
+  findOne(address: string) {
+    if (!address) {
+      throw new Error('Address not provided');
     }
     return this.prisma.community.findUnique({
       where: {
-        id,
+        address,
       },
       include: {
         summary: true,

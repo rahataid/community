@@ -4,7 +4,7 @@ const SHEET_ID = '12dYbZgtxFXGPzWQFPG9Qe7NJpKUoMdbZh7O1dIO5NQM';
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const googleCreds = require('../config/google.json');
 const axios = require('axios');
-const generateWallet = require('./generateWallet');
+// const generateWallet = require('./generateWallet');
 
 const communityHost = axios.create({
   // baseURL: 'https://community-api-stage.rahat.io',

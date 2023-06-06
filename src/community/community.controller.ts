@@ -21,7 +21,7 @@ import {
 @Controller('communities')
 @ApiTags('communities')
 export class CommunityController {
-  constructor(private readonly communitiesService: CommunityService) { }
+  constructor(private readonly communitiesService: CommunityService) {}
 
   @Post()
   create(@Body() createCommunityDto: CreateCommunityDto) {
@@ -34,9 +34,8 @@ export class CommunityController {
   }
 
   @Get(':address')
-  findOne(@Param('address') address: String) {
-    console.log('address', address);
-    return this.communitiesService.findOne(String(address));
+  findOne(@Param('address') address: string) {
+    return this.communitiesService.findOne(address);
   }
 
   @Patch(':id')

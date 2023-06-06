@@ -15,7 +15,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Community Service')
-    .setDescription('Rahat Community')
+    .setDescription('Rahat Community Management Service')
     .setVersion('0.1')
     .build();
 

@@ -11,7 +11,6 @@ export class CommunityService {
 
   create(createCommunityDto: CreateCommunityDto) {
     const { tags, summary, categoryId, ...communityData } = createCommunityDto;
-    console.log('tags', tags);
 
     return this.prisma.community.create({
       data: {
@@ -60,7 +59,7 @@ export class CommunityService {
       },
 
       orderBy: {
-        updatedAt: 'asc',
+        name: 'asc',
       },
     });
   }

@@ -22,6 +22,7 @@ export class CreateCommunityDto {
     type: 'number',
     example: 1,
     description: 'Community Category',
+    required: true,
   })
   @IsNumber()
   categoryId: number;
@@ -30,7 +31,7 @@ export class CreateCommunityDto {
     type: 'string',
     example: 'h20 Relief distribution',
     description: 'H20 relief distribution',
-    required: false,
+    required: true,
   })
   @IsString()
   description: string;
@@ -57,7 +58,7 @@ export class CreateCommunityDto {
     type: 'string',
     example: 'Nepal',
     description: 'community Country',
-    required: false,
+    required: true,
   })
   @IsString()
   country: string;
@@ -66,10 +67,28 @@ export class CreateCommunityDto {
     type: 'number',
     example: 500,
     description: 'Budget of the community',
-    required: false,
+    required: true,
   })
   @IsNumber()
-  totalDonations_usd: number;
+  fundRaisedUsd: number;
+
+  @ApiProperty({
+    type: 'string',
+    example: '500',
+    description: 'Fund raised by the community in local currency',
+    required: true,
+  })
+  @IsString()
+  fundRaisedLocal: string;
+
+  @ApiProperty({
+    type: 'string',
+    example: 'NPR',
+    description: 'Local Currency',
+    required: true,
+  })
+  @IsString()
+  localCurrency: string;
 
   @ApiProperty({
     type: 'array',

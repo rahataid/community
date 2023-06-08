@@ -4,11 +4,12 @@ const SHEET_ID = '12dYbZgtxFXGPzWQFPG9Qe7NJpKUoMdbZh7O1dIO5NQM';
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const googleCreds = require('../config/google.json');
 const axios = require('axios');
+const data = require('./community_data.json');
 // const generateWallet = require('./generateWallet');
 
 const communityHost = axios.create({
-  baseURL: 'https://community-api-stage.rahat.io',
-  // baseURL: 'http://localhost:5300',
+  // baseURL: 'https://community-api-stage.rahat.io',
+  baseURL: 'http://localhost:5300',
 });
 
 function formatGoogleDriveURL(url) {
@@ -46,7 +47,8 @@ const lib = {
         ...commData
       } = sanitizedData[dataIndex];
 
-      console.log('commData', commData);
+      const foundFromData = data.find((d) => d.address === commData.address);
+
       const createData = {
         ...commData,
         managers: [manager],
@@ -54,9 +56,9 @@ const lib = {
         categoryId: category,
 
         tags: [tags],
+        images: { ...foundFromData.images },
       };
 
-      console.log('createData', createData);
       const { data: communityData } = await communityHost.post(
         '/communities',
         createData,
@@ -91,7 +93,9 @@ const lib = {
         cover: row.cover ? formatGoogleDriveURL(row.cover) : '',
         gallery: [],
       },
-      totalDonations_usd: Math.round(Number(row.tx_usd)) || 0,
+      fundRaisedUsd: Number(row.tx_usd) || 0,
+      localCurrency: row?.currency || 'NPR',
+      fundRaisedLocal: String(row?.tx_npr) || 0,
       longitude: Number(row.longitude) || '',
       latitude: Number(row.latitude) || '',
       country: row?.country || 'Nepal',

@@ -50,7 +50,9 @@ export class CommunityService {
         country: true,
         name: true,
         id: true,
-        totalDonations_usd: true,
+        fundRaisedUsd: true,
+        fundRaisedLocal: true,
+        localCurrency: true,
         latitude: true,
         longitude: true,
         description: true,
@@ -75,6 +77,7 @@ export class CommunityService {
       include: {
         summary: true,
         category: true,
+        _count: true,
       },
     });
   }
@@ -103,7 +106,7 @@ export class CommunityService {
       throw new Error('Community not found');
     }
 
-    const commImage = community.images;
+    const commImage = community.images as Prisma.JsonObject;
 
     if (assetData.logo) {
       updateData.logo = assetData.logo;
@@ -121,8 +124,6 @@ export class CommunityService {
       where: { id },
       data: {
         images: {
-          //@ts-ignore
-          //@ts-nocheck
           ...commImage,
           ...updateData,
         },

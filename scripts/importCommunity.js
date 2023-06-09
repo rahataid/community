@@ -8,8 +8,8 @@ const data = require('./community_data.json');
 // const generateWallet = require('./generateWallet');
 
 const communityHost = axios.create({
-  // baseURL: 'https://community-api-stage.rahat.io',
-  baseURL: 'http://localhost:5300',
+  baseURL: 'https://community-api-stage.rahat.io',
+  // baseURL: 'http://localhost:5300',
 });
 
 function formatGoogleDriveURL(url) {

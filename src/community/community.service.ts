@@ -31,33 +31,26 @@ export class CommunityService {
     });
   }
 
-  findAll({ search, category, country }: any) {
-    let queryCondition = {};
-    if (category) {
-      queryCondition = {
-        ...queryCondition,
-        categoryId: Number(category),
+  findAll(query: any) {
+    const where: any = {};
+
+    if (query.category) {
+      where.categoryId = Number(query.category);
+    }
+
+    if (query.country) {
+      where.country = query.country;
+    }
+
+    if (query.name) {
+      where.name = {
+        contains: query.name,
+        mode: 'insensitive',
       };
     }
-    if (country) {
-      queryCondition = {
-        ...queryCondition,
-        country,
-      };
-    }
-    if (search) {
-      queryCondition = {
-        ...queryCondition,
-        name: {
-          contains: search,
-          mode: 'insensitive',
-        },
-      };
-    }
+
     return this.prisma.community.findMany({
-      where: {
-        ...queryCondition,
-      },
+      where,
       select: {
         category: true,
         country: true,
@@ -72,7 +65,6 @@ export class CommunityService {
         address: true,
         images: true,
       },
-
       orderBy: {
         name: 'asc',
       },

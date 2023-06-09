@@ -5,9 +5,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { CommunityModule } from './community/community.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
-  imports: [PrismaModule, CommunityModule],
+  imports: [PrismaModule, CommunityModule, CategoriesModule],
   controllers: [AppController],
   providers: [
     AppService,

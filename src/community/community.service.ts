@@ -31,12 +31,25 @@ export class CommunityService {
     });
   }
 
-  findAll(query?: string) {
+  findAll({ search, category, country }: any) {
     let queryCondition = {};
-    if (query) {
+    if (category) {
       queryCondition = {
+        ...queryCondition,
+        categoryId: Number(category),
+      };
+    }
+    if (country) {
+      queryCondition = {
+        ...queryCondition,
+        country,
+      };
+    }
+    if (search) {
+      queryCondition = {
+        ...queryCondition,
         name: {
-          contains: query,
+          contains: search,
           mode: 'insensitive',
         },
       };

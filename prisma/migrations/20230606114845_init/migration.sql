@@ -1,9 +1,6 @@
 -- CreateEnum
 CREATE TYPE "TxnsStatus" AS ENUM ('SUCCESS', 'PENDING', 'FAILED');
 
--- CreateEnum
-CREATE TYPE "Gender" AS ENUM ('M', 'F', 'O');
-
 -- CreateTable
 CREATE TABLE "tbl_communities" (
     "id" SERIAL NOT NULL,

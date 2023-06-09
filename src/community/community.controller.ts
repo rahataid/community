@@ -29,8 +29,12 @@ export class CommunityController {
   }
 
   @Get()
-  findAll(@Query('search') search?: string) {
-    return this.communitiesService.findAll(search);
+  findAll(
+    @Query('search') search?: string,
+    @Query('category') category?: string,
+    @Query('country') country?: string,
+  ) {
+    return this.communitiesService.findAll({ search, category, country });
   }
 
   @Get(':address')

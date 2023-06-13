@@ -2,16 +2,17 @@
 
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@pipes/validation.pipe';
 import { PORT } from 'src/config';
 import { AppModule } from './app.module';
+import { RsExceptionFilter } from './utils/exceptions/rs-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors();
 
-  app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new RsExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle('Community Service')

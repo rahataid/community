@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { paginate } from 'src/utils/paginate';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { CreateManager } from './dto/manager.dto';
 import { UpdateCommunityAssetDto } from './dto/update-community.dto';
-
 @Injectable()
 export class CommunityService {
   constructor(private readonly prisma: PrismaService) {}
@@ -49,22 +49,9 @@ export class CommunityService {
       };
     }
 
-    return this.prisma.community.findMany({
+    return paginate(this.prisma.community, {
       where,
-      select: {
-        category: true,
-        country: true,
-        name: true,
-        id: true,
-        fundRaisedUsd: true,
-        fundRaisedLocal: true,
-        localCurrency: true,
-        latitude: true,
-        longitude: true,
-        description: true,
-        address: true,
-        images: true,
-      },
+
       orderBy: {
         name: 'asc',
       },

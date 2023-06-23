@@ -1,35 +1,19 @@
-# Base image
-FROM node:18-alpine
-
-# Create app directory
-WORKDIR /usr/src/app
-
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
+FROM node:18-alpine3.17 AS builder
+RUN apk add --update bash git
+WORKDIR /opt/app
 COPY package.json yarn.lock ./
-
-# Copy prisma schemas and files
-COPY prisma ./prisma/
-
-# Install app dependencies
-RUN npm install
-
+RUN yarn install
+COPY . .
 # Generate Prisma client
 RUN npx prisma generate
+RUN yarn build
 
-
-# Bundle app source
-COPY . .
-
-# Creates a "dist" folder with the production build
-RUN npm run build
-
-# Expose port 3000 for the application
-EXPOSE 3000
-
-# Start the server using the production build
+# Final Image
+FROM node:18-alpine3.17
+RUN apk add --update bash git
+WORKDIR /usr/src/app
+COPY --from=builder /opt/app/dist ./dist/
+COPY --from=builder /opt/app/node_modules ./node_modules/
+COPY --from=builder /opt/app/package.json ./package.json
+COPY --from=builder /opt/app/prisma ./prisma/
 CMD [ "node", "dist/src/main.js" ]
-
-
-
-
-

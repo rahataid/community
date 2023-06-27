@@ -84,11 +84,11 @@ export class RsExceptionFilter implements PipeTransform<any>, ExceptionFilter {
       responseData.message = exception.message;
       responseData.group = 'HTTP';
     } else if (exception instanceof RsException) {
-      if (isObjectWithErrors(exceptionResponse)) {
-        responseData.meta = exceptionResponse?.errors ?? '';
-      } else {
-        responseData.meta = [response?.errors ?? ''];
-      }
+      // if (isObjectWithErrors(exceptionResponse)) {
+      //   responseData.meta = exceptionResponse?.errors ?? '';
+      // } else {
+      //   responseData.meta = [response?.errors ?? ''];
+      // }
       responseData.message = exception.message;
       responseData.statusCode = exception.httpCode;
       responseData.name = exception.name;

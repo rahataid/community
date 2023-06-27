@@ -55,7 +55,9 @@ export class RsExceptionFilter implements PipeTransform<any>, ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
-    const exceptionResponse = exception?.getResponse() || null;
+    const exceptionResponse = exception.getResponse
+      ? exception?.getResponse()
+      : null;
 
     const responseData = {
       name: 'DEFAULT',
